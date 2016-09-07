@@ -1,6 +1,8 @@
 package gnormalizer
 
-import Vertex.Vertex
+import cats.instances.all._
+import cats.syntax.eq._
+import gnormalizer.Vertex.Vertex
 
 /**
   * Represents the connection between two [[Vertex]].
@@ -14,7 +16,7 @@ case class Edge(source : Vertex, target : Vertex) extends Comparable[Edge] {
     */
   override def compareTo(other: Edge): Int = {
     val sourceComparision : Int = source.compareTo(other.source)
-    if (sourceComparision.equals(0)) {
+    if (sourceComparision === 0) {
       this.target.compare(other.target)
     } else {
       sourceComparision
