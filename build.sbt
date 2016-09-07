@@ -34,6 +34,6 @@ libraryDependencies ++= {
 // Test Options
 scalacOptions in Test ++= Seq("-Yrangepos")
 
-parallelExecution in Test := false
+parallelExecution in Test := true
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
