@@ -18,6 +18,8 @@ libraryDependencies ++= {
 }
 
 // Test Dependencies
+resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases" // Nedeed for Scalamock
+
 libraryDependencies ++= {
   val specs2Version = "3.8.4"
   val specs2ScalaMockVersion = "3.2.2"
