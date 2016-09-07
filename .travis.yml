@@ -1,0 +1,26 @@
+language: scala
+
+scala: 2.11.8
+
+jdk: oraclejdk8
+
+before_script:
+  - export CODACY_PROJECT_TOKEN=1969eacac7ce42d8a8acdb9f489c1e78
+
+script:
+  - sbt clean coverage test
+  - sbt coverageReport
+  - sbt coverageAggregate
+  - sbt codacyCoverage
+
+script:
+  - sbt coverage test
+  - sbt coverageReport
+  - sbt coverageAggregate
+  - sbt codacyCoverage
+
+cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.sbt
+    - $HOME/.ivy2
