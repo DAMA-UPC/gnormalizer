@@ -13,9 +13,11 @@ case class Edge(source : Vertex, target : Vertex) extends Comparable[Edge] {
     * case the comparision between the [[Edge.target]] is returned instead.
     */
   override def compareTo(other: Edge): Int = {
-    source.compare(other.source) match {
-      case 0 => target.compare(other.target)
-      case x => x
+    val sourceComparision : Int = source.compareTo(other.source)
+    if (sourceComparision.equals(0)) {
+      this.target.compare(other.target)
+    } else {
+      sourceComparision
     }
   }
 }
