@@ -11,9 +11,12 @@ import scala.collection.immutable.HashMap
 class VertexIndexMapperTest extends Specification {
 
   "Test an empty mapper" should {
-    "A newly created mapper should not contain any mapping" in {
-      val mapper: VertexIndexMapper = new VertexIndexMapper()
+    val mapper: VertexIndexMapper = new VertexIndexMapper()
+    "The vertex mapping size is equal to '0' (There are no elements)" in {
       mapper.vertexMapping.size must beEqualTo(0)
+    }
+    "The vertexMapping() method returns an immutable empty map" in {
+      mapper.vertexMapping must beEqualTo(Map[String, Vertex]())
     }
   }
 
@@ -21,13 +24,13 @@ class VertexIndexMapperTest extends Specification {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
     val testString: String = "test string"
     val index: Vertex = mapper.vertexIndex(testString)
-    "The vertex mapping size is equal to '1'" in {
+    "The vertex mapping size is equal to '1' (There is a single vertex)" in {
       mapper.vertexMapping.size must beEqualTo(1)
     }
     "The returned Vertex index should be '0'" in {
       index must beEqualTo(0)
     }
-    "The vertex mapping element must contain the inserted mapping" in {
+    "The vertexMapping() method returns a mapping with the inserted element" in {
       mapper.vertexMapping must beEqualTo(Map(testString -> 0))
     }
     "Return the same mapping if asking for the same element for a second time" in {
@@ -43,7 +46,7 @@ class VertexIndexMapperTest extends Specification {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
     val testStrings: Seq[String] = (0 until numberVertex).map(i => s"test string $i")
     val index: Seq[Vertex] = testStrings.map(mapper.vertexIndex)
-    s"The vertex mapping size is equal to '$numberVertex'" in {
+    s"There must be '$numberVertex' stored mappings" in {
       mapper.vertexMapping.size must beEqualTo(numberVertex)
     }
     s"The returned Vertex index should be from '0' until '$numberVertex'" in {
@@ -56,7 +59,7 @@ class VertexIndexMapperTest extends Specification {
         }
       }
     }
-    "The vertex mapping element must contain all the inserted mappings" in {
+    "The vertexMapping() method returns a mapping with the inserted elements" in {
       mapper.vertexMapping must beEqualTo(mappingExpectation)
     }
     "Return the same mappings if asking for the same elements for a second time" in {
@@ -70,9 +73,11 @@ class VertexIndexMapperTest extends Specification {
   val numberParallelVertex: Int = 100000
   s"BRUTE FORCE TEST: Generates '$numberParallelVertex' elements in parallel" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val testStrings: Seq[String] = (0 until numberParallelVertex).map(i => s"test string $i")
+    val testStrings: Seq[String] = {
+      (0 until numberParallelVertex).map(i => s"Parallel test String $i")
+    }
     val insertedIndexes: Seq[Vertex] = testStrings.par.map(mapper.vertexIndex).toList
-    s"The vertex mapping size is equal to '$numberParallelVertex'" in {
+    s"There must be '$numberParallelVertex' parallel inserted mappings" in {
       mapper.vertexMapping.size must beEqualTo(numberParallelVertex)
     }
     s"The parallel inserted vertex indexes must go from '0' to '$numberParallelVertex'" in {
