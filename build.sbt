@@ -6,7 +6,7 @@ scalaVersion := "2.11.8"
 
 // Dependencies
 libraryDependencies ++= {
-  val fs2Version = "0.9.0-RC2"
+  val fs2Version = "0.9.0"
   Seq(
     // https://github.com/functional-streams-for-scala/fs2
     "co.fs2" %% "fs2-core" % fs2Version,
