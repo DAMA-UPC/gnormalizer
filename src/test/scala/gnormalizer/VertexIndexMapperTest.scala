@@ -22,12 +22,12 @@ class VertexIndexMapperTest extends Specification {
 
   "Test a mapper generating a single element" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val testString: String = "test string"
+    val testString: String = "Single mapping test string"
     val index: Vertex = mapper.vertexIndex(testString)
     "The vertex mapping size is equal to '1' (There is a single vertex)" in {
       mapper.vertexMapping.size must beEqualTo(1)
     }
-    "The returned Vertex index should be '0'" in {
+    "The returned Vertex index must be '0'" in {
       index must beEqualTo(0)
     }
     "The vertexMapping() method returns a mapping with the inserted element" in {
@@ -44,12 +44,14 @@ class VertexIndexMapperTest extends Specification {
   val numberVertex: Int = 10
   s"Test a mapper generating $numberVertex elements sequentially" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val testStrings: Seq[String] = (0 until numberVertex).map(i => s"test string $i")
+    val testStrings: Seq[String] = {
+      (0 until numberVertex).map(i => s"Multiple mapping test String: $i")
+    }
     val index: Seq[Vertex] = testStrings.map(mapper.vertexIndex)
     s"There must be '$numberVertex' stored mappings" in {
       mapper.vertexMapping.size must beEqualTo(numberVertex)
     }
-    s"The returned Vertex index should be from '0' until '$numberVertex'" in {
+    s"Returned Vertex indexes must go from '0' until '$numberVertex'" in {
       index must beEqualTo(0 until numberVertex)
     }
     val mappingExpectation = {
