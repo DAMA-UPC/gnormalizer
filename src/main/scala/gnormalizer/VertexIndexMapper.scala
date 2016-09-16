@@ -25,9 +25,9 @@ class VertexIndexMapper {
       case Some(index) => index
       case _ =>
         vertexMappingCache.synchronized {
-          val currentNumberVertixes = vertexMappingCache.size
-          vertexMappingCache += (vertex -> currentNumberVertixes)
-          currentNumberVertixes
+          val currentNumberVertexes = vertexMappingCache.size
+          vertexMappingCache += (vertex -> currentNumberVertexes)
+          currentNumberVertexes
         }
     }
   }
