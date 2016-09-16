@@ -37,4 +37,13 @@ class EdgeTest extends Specification {
       sourceEdge.compareTo(targetEdge) must beLessThan(0)
     }
   }
+
+  "toString() method" should {
+    "Return the first element appended to the second element separated by a whitespace" in {
+      val firstElement = 1
+      val secondElement = 2
+      val edge = Edge(firstElement, secondElement)
+      edge.toString must beEqualTo("1 2")
+    }
+  }
 }
