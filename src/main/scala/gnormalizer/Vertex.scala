@@ -2,5 +2,6 @@ package gnormalizer
 
 object Vertex {
 
-  type Vertex = Int
+  type InputVertex = String
+  type VertexMapping = Int
 }

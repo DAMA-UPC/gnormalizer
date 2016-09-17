@@ -1,8 +1,9 @@
 package gnormalizer
 
-import gnormalizer.Vertex.Vertex
+import gnormalizer.Vertex.{InputVertex, VertexMapping}
 
-import scala.collection.{immutable, mutable}
+import scala.collection.immutable.{Stream => MemoryStream}
+import scala.collection.mutable
 
 /**
   * Trait containing the method used for retrieving the vertexes IDs. If a Vertex
@@ -10,8 +11,8 @@ import scala.collection.{immutable, mutable}
   */
 class VertexIndexMapper {
 
-  private[this] val vertexMappingCache: mutable.Map[String, Vertex] = {
-    mutable.HashMap.empty[String, Vertex]
+  private[this] val vertexMappingCache: mutable.Map[InputVertex, VertexMapping] = {
+    mutable.HashMap.empty[InputVertex, VertexMapping]
   }
 
   /**
@@ -20,7 +21,7 @@ class VertexIndexMapper {
     * @param vertex from the index that will be retrieved.
     * @return [[Vertex]] with the resulting index. (Starting from 0).
     */
-  def vertexIndex(vertex: String): Vertex = {
+  def vertexMapping(vertex: InputVertex): VertexMapping = {
     vertexMappingCache.get(vertex) match {
       case Some(index) => index
       case _ =>
@@ -33,7 +34,10 @@ class VertexIndexMapper {
   }
 
   /**
-    * Obtains the mapping from all the indexed [[Vertex]] as an [[immutable.Map[[String, Vertex]]]]
+    * Obtains the mapping from all the indexed [[Vertex]] as
+    * a [[MemoryStream[[(Vertex, VertexMappingId)]]]].
     */
-  def vertexMapping: immutable.Map[String, Vertex] = vertexMappingCache.toMap
+  def initMappingStream: MemoryStream[(InputVertex, VertexMapping)] = {
+    vertexMappingCache.toStream
+  }
 }

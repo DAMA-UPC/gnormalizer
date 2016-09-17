@@ -2,7 +2,7 @@ package gnormalizer
 
 import java.security.SecureRandom
 
-import gnormalizer.Vertex.Vertex
+import gnormalizer.Vertex.VertexMapping
 import org.specs2.mutable.Specification
 
 /**
@@ -11,7 +11,7 @@ import org.specs2.mutable.Specification
 class EdgeTest extends Specification {
 
   "compareTo method" should {
-    def any: Vertex = new SecureRandom().nextInt()
+    def any: VertexMapping = new SecureRandom().nextInt()
     "Return '0' when two edges are equal" in {
       val sourceAndTargetEdge = Edge(source = any, target = any)
       sourceAndTargetEdge.compareTo(sourceAndTargetEdge) must beEqualTo(0)
