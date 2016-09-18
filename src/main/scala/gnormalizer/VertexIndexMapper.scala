@@ -39,9 +39,9 @@ final class VertexIndexMapper {
           vertexMappingCache.get(vertex) match {
             case Some(index) => index
             case _ =>
-              vertexMappingCache += (vertex -> mappingCacheSize.toInt)
+              vertexMappingCache += (vertex -> mappingCacheSize)
               mappingCacheSize += 1
-              mappingCacheSize.toInt - 1
+              mappingCacheSize - 1
           }
         }
     }

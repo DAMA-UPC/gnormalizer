@@ -40,8 +40,8 @@ class EdgeTest extends Specification {
 
   "toString() method" should {
     "Return the first element appended to the second element separated by a whitespace" in {
-      val firstElement = 1
-      val secondElement = 2
+      val firstElement : VertexMapping = 1L
+      val secondElement : VertexMapping = 2L
       val edge = Edge(firstElement, secondElement)
       edge.toString must beEqualTo("1 2")
     }
