@@ -13,7 +13,7 @@ class VertexIndexMapperTest extends Specification {
   "Test an empty mapper" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
     "The vertex mapping size is equal to '0' (There are no elements)" in {
-      mapper.initMappingStream.size must beEqualTo(0)
+      mapper.numberMappings must beEqualTo(0)
     }
     "The vertexMapping() method returns an immutable empty map" in {
       mapper.initMappingStream.toMap must beEqualTo(Map[InputVertex, VertexMapping]())
@@ -25,7 +25,7 @@ class VertexIndexMapperTest extends Specification {
     val testVertex: String = "Single mapping test string"
     val index: VertexMapping = mapper.vertexMapping(testVertex)
     "The vertex mapping size is equal to '1' (There is a single vertex)" in {
-      mapper.initMappingStream.size must beEqualTo(1)
+      mapper.numberMappings must beEqualTo(1)
     }
     "The returned Vertex index must be '0'" in {
       index must beEqualTo(0)
@@ -49,7 +49,7 @@ class VertexIndexMapperTest extends Specification {
     }
     val index: Seq[VertexMapping] = testVertex.map(mapper.vertexMapping)
     s"There must be '$numberVertex' stored mappings" in {
-      mapper.initMappingStream.size must beEqualTo(numberVertex)
+      mapper.numberMappings must beEqualTo(numberVertex)
     }
     s"Returned Vertex indexes must go from '0' until '$numberVertex'" in {
       index must beEqualTo(0 until numberVertex)
@@ -80,7 +80,7 @@ class VertexIndexMapperTest extends Specification {
     }
     val insertedIndexes: Seq[VertexMapping] = testVertex.par.map(mapper.vertexMapping).toList
     s"There must be '$numberParallelVertex' parallel inserted mappings" in {
-      mapper.initMappingStream.size must beEqualTo(numberParallelVertex)
+      mapper.numberMappings must beEqualTo(numberParallelVertex)
     }
     s"The parallel inserted vertex indexes must go from '0' to '$numberParallelVertex'" in {
       insertedIndexes.sorted must beEqualTo(0 until numberParallelVertex)
