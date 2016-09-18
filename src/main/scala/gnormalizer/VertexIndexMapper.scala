@@ -34,9 +34,15 @@ final class VertexIndexMapper {
       case Some(index) => index
       case _ =>
         vertexMappingCache.synchronized {
-          vertexMappingCache += (vertex -> mappingCacheSize.toInt)
-          mappingCacheSize += 1
-          mappingCacheSize.toInt - 1
+          // The second level of nesting is done in order to fix a race condition issue
+          // when two elements arrive at the synchronized block simultaneously.
+          vertexMappingCache.get(vertex) match {
+            case Some(index) => index
+            case _ =>
+              vertexMappingCache += (vertex -> mappingCacheSize.toInt)
+              mappingCacheSize += 1
+              mappingCacheSize.toInt - 1
+          }
         }
     }
   }

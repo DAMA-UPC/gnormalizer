@@ -34,8 +34,8 @@ class VertexIndexMapperTest extends Specification {
       mapper.initMappingStream.toMap must beEqualTo(Map(testVertex -> 0))
     }
     "Return the same mapping if asking for the same element for a second time" in {
-      val repitedIndex: VertexMapping = mapper.vertexMapping(testVertex)
-      (repitedIndex must beEqualTo(index)) &&
+      val repeatedIndex: VertexMapping = mapper.vertexMapping(testVertex)
+      (repeatedIndex must beEqualTo(index)) &&
         (mapper.initMappingStream.size must beEqualTo(1)) &&
         (mapper.initMappingStream.toMap must beEqualTo(Map(testVertex -> 0)))
     }
@@ -72,18 +72,38 @@ class VertexIndexMapperTest extends Specification {
     }
   }
 
-  val numberParallelVertex: Int = 100000
-  s"BRUTE FORCE TEST: Generates '$numberParallelVertex' elements in parallel" should {
+  val numberEqualParallelVertex: Int = 100000
+  s"Manages in parallel' $numberEqualParallelVertex' petitions from same element" should {
+    val mapper: VertexIndexMapper = new VertexIndexMapper()
+    val repeatedElement: InputVertex = "Element to repeat multiple times"
+    val element = {
+      (0 until numberEqualParallelVertex).map(_ => mapper.vertexMapping(repeatedElement))
+    }
+
+    s"All petitions returned the same index: '0'" in {
+      element.forall(_ == 0)
+    }
+    s"There must be a single mapping in the mapper" in {
+      mapper.numberMappings must beEqualTo(1)
+    }
+    "The vertexMapping() method returns a map with only one mapping" in {
+      val expectedMappings = Map[InputVertex, VertexMapping](repeatedElement -> 0)
+      mapper.initMappingStream.toMap must beEqualTo(expectedMappings)
+    }
+  }
+
+  val numberDifferentParallelVertex: Int = 100000
+  s"Maps in parallel '$numberDifferentParallelVertex' elements" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
     val testVertex: Seq[InputVertex] = {
-      (0 until numberParallelVertex).map(i => s"Parallel test String $i")
+      (0 until numberDifferentParallelVertex).map(i => s"Parallel test String $i")
     }
     val insertedIndexes: Seq[VertexMapping] = testVertex.par.map(mapper.vertexMapping).toList
-    s"There must be '$numberParallelVertex' parallel inserted mappings" in {
-      mapper.numberMappings must beEqualTo(numberParallelVertex)
+    s"There must be '$numberDifferentParallelVertex' parallel inserted mappings" in {
+      mapper.numberMappings must beEqualTo(numberDifferentParallelVertex)
     }
-    s"The parallel inserted vertex indexes must go from '0' to '$numberParallelVertex'" in {
-      insertedIndexes.sorted must beEqualTo(0 until numberParallelVertex)
+    s"Parallel inserted vertex indexes must go from '0' to '$numberDifferentParallelVertex'" in {
+      insertedIndexes.sorted must beEqualTo(0 until numberDifferentParallelVertex)
     }
   }
 }
