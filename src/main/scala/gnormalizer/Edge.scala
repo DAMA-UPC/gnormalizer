@@ -12,6 +12,7 @@ case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable
     * are ordered comparing both [[Edge.source]] unless both are equal, in this
     * case the comparision between the [[Edge.target]] is returned instead.
     */
+  @inline
   override def compareTo(other: Edge): Int = {
     val sourceComparision: Int = source.compareTo(other.source)
     if (sourceComparision == 0) {
@@ -28,5 +29,19 @@ case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable
     * For example:
     * '1 2'
     */
+  @inline
   override def toString: String = s"$source $target"
+}
+
+/**
+  * Companion object for [[Edge]]
+  */
+object Edge {
+
+  /**
+    * Implicit ordering for [[Edge]]. Internally calls [[Edge.compareTo()]].
+    */
+  implicit val ordering = new Ordering[Edge] {
+    def compare(p1: Edge, p2: Edge) = p1 compareTo p2
+  }
 }
