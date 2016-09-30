@@ -3,12 +3,13 @@ package gnormalizer
 import java.security.SecureRandom
 
 import gnormalizer.Vertex.VertexMapping
+import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 
 /**
   * Test for: @see [[Edge]]
   */
-class EdgeTest extends Specification {
+class EdgeTest extends Specification with ScalaCheck {
 
   "compareTo method" should {
     def any: VertexMapping = new SecureRandom().nextInt()
@@ -39,11 +40,16 @@ class EdgeTest extends Specification {
   }
 
   "toString() method" should {
-    "Return the first element appended to the second element separated by a whitespace" in {
-      val firstElement : VertexMapping = 1L
-      val secondElement : VertexMapping = 2L
-      val edge = Edge(firstElement, secondElement)
-      edge.toString must beEqualTo("1 2")
+    "Return the first element appended to the second element separated by a whitespace" >> {
+      val numberScalacheckTries : Int = 200
+      val numberWorkers : Int = 4
+      prop {
+        (a: VertexMapping, b: VertexMapping) =>
+          Edge(a, b).toString.equals(s"$a $b")
+      }.set(
+        minTestsOk = numberScalacheckTries,
+        workers = numberWorkers
+      )
     }
   }
 }
