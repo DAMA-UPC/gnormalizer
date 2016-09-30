@@ -7,16 +7,17 @@ import org.specs2.mutable.Specification
   */
 class FileStreamInitializerTest extends Specification {
 
+  def initLoggedFileStream(filePath: String): Vector[String] =
+    FileStreamInitializer.
+      initializeFileStream(filePath).
+      runLog.
+      unsafeRun()
+
   "initializeFileStream() method" should {
     val oneElementEdgeFilePath = "src/test/resources/edge_list/test_edge_list_one_element"
     s"Works with files with no break lines: '$oneElementEdgeFilePath'" in {
-      val rawFileContents: Vector[String] = {
-        FileStreamInitializer.
-          initializeFileStream(oneElementEdgeFilePath).
-          runLog.
-          unsafeRun()
-      }
-      s"Contains only a streamed value (No split is done yet)" in {
+      val rawFileContents: Vector[String] = initLoggedFileStream(oneElementEdgeFilePath)
+      s"All content from $oneElementEdgeFilePath is extracted without any type split" in {
         rawFileContents must haveSize(1)
       }
       val expectedEdge: String = "0 1"
@@ -27,13 +28,8 @@ class FileStreamInitializerTest extends Specification {
 
     val simpleEdgeFilePath = "src/test/resources/edge_list/test_simple_edge_list"
     s"Works with files with break lines: '$simpleEdgeFilePath'" in {
-      val rawFileContents: Vector[String] = {
-        FileStreamInitializer.
-          initializeFileStream(simpleEdgeFilePath).
-          runLog.
-          unsafeRun()
-      }
-      s"Contains only a streamed value (No split is done yet)" in {
+      val rawFileContents: Vector[String] = initLoggedFileStream(simpleEdgeFilePath)
+      s"Extracts the content from $simpleEdgeFilePath without any type split" in {
         rawFileContents must haveSize(1)
       }
       val expectedFileContent: String = "0 1\n1 2\n1 3\n1 9"
