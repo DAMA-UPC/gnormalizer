@@ -26,7 +26,7 @@ libraryDependencies ++= {
     "org.specs2" %% "specs2-core" % specs2Version % "test",
     "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test",
     "org.specs2" %% "specs2-junit" % specs2Version % "test",
-    "org.specs2" %% "specs2-cats" % specs2Version % "test",
+    "org.specs2" %% "specs2-scalacheck" % specs2Version % "test",
     "org.scalamock" %% "scalamock-specs2-support" % specs2ScalaMockVersion % "test",
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
   )
