@@ -19,7 +19,7 @@ resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases" //
 
 libraryDependencies ++= {
   val specs2Version = "3.8.5"
-  val specs2ScalaMockVersion = "3.2.2"
+  val specs2ScalaMockVersion = "3.3.0"
   val scalaCheckVersion = "1.13.2"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/website/SPECS2-3.8.5/quickstart.html
