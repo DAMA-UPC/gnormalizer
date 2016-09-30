@@ -1,6 +1,7 @@
 package gnormalizer
 
-import gnormalizer.Vertex.{InputVertex, VertexMapping}
+import gnormalizer.models.Vertex
+import gnormalizer.models.Vertex.{InputVertex, VertexMapping}
 
 import scala.collection.immutable.{Stream => MemoryStream}
 import scala.collection.mutable

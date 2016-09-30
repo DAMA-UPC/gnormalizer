@@ -1,6 +1,6 @@
 package gnormalizer.sorters
 
-import gnormalizer.Edge
+import gnormalizer.models.Edge
 
 /**
   * Base trait for all graph sorters.

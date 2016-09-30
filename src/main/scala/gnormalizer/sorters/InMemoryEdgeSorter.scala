@@ -1,6 +1,6 @@
 package gnormalizer.sorters
 
-import gnormalizer.Edge
+import gnormalizer.models.Edge
 
 import scala.collection.mutable
 

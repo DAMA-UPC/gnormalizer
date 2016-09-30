@@ -1,8 +1,8 @@
-package gnormalizer
+package gnormalizer.models
 
 import java.security.SecureRandom
 
-import gnormalizer.Vertex.VertexMapping
+import gnormalizer.models.Vertex.VertexMapping
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 

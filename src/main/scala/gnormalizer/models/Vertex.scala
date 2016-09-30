@@ -1,4 +1,4 @@
-package gnormalizer
+package gnormalizer.models
 
 object Vertex {
 
