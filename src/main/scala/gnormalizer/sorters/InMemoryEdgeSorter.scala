@@ -11,7 +11,9 @@ import scala.collection.mutable
   * @param resultTreeNodeBucketKeySize the maximum amount of key values in each bucket.
   *                                    The key values corresponds to the [[Edge.source]]
   */
-final case class InMemoryEdgeSorter(resultTreeNodeBucketKeySize : Int = 2500) extends Sorter {
+final case class InMemoryEdgeSorter(resultTreeNodeBucketKeySize : Int =
+                                    InMemoryEdgeSorter.defaultSourceNodeMaxBucketSize
+                                   ) extends Sorter {
 
   private[this] val resultBuckets = mutable.LongMap[mutable.TreeSet[Edge]]()
 
@@ -63,4 +65,16 @@ final case class InMemoryEdgeSorter(resultTreeNodeBucketKeySize : Int = 2500) ex
     */
   private[sorters] def numberBuckets: Int = resultBuckets.size
 
+}
+
+/**
+  * Companion object for @see [[InMemoryEdgeSorter]]
+  */
+object InMemoryEdgeSorter {
+
+  /**
+    * The default amount of [[Edge]] which [[Edge.source]] node
+    * are placed in a node Bucket at maximum.
+    */
+  @inline val defaultSourceNodeMaxBucketSize : Int = 500
 }
