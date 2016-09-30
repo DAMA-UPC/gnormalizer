@@ -1,5 +1,7 @@
 package gnormalizer.models
 
+import gnormalizer.models.Vertex.VertexMapping
+
 /**
   * Represents the connection between two [[Vertex]].
   */
