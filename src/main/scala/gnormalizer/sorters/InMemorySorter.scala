@@ -8,22 +8,18 @@ import scala.collection.mutable
   * Orders all the input [[Edge]] forcing not to use the disk in the process,
   * forcing the memory usage during all the process.
   *
-  * @param resultTreeNodeBucketKeySize the maximum amount of key values in each bucket.
-  *                                    The key values corresponds to the [[Edge.source]]
+  * @param maxBucketSize the maximum amount of key values in each bucket.
+  *                      The key values corresponds to the [[Edge.source]]
   */
-final case class InMemoryEdgeSorter(resultTreeNodeBucketKeySize : Int =
-                                    InMemoryEdgeSorter.defaultSourceNodeMaxBucketSize
-                                   ) extends Sorter {
+final case class InMemorySorter(maxBucketSize: Int = Sorter.defaultMaxBucketSize) extends Sorter {
 
   private[this] val resultBuckets = mutable.LongMap[mutable.TreeSet[Edge]]()
 
   /**
-    * Adds an [[Edge]] to order to the result.
-    *
-    * @param edge to be ordered.
+    * @inheritdoc
     */
   def addEdgeToResult(edge: Edge): Unit = {
-    val bucketId: Long = edge.source / resultTreeNodeBucketKeySize
+    val bucketId: Long = edge.source / maxBucketSize
 
     resultBuckets.get(bucketId) match {
       case Some(bucket) =>
@@ -65,16 +61,4 @@ final case class InMemoryEdgeSorter(resultTreeNodeBucketKeySize : Int =
     */
   private[sorters] def numberBuckets: Int = resultBuckets.size
 
-}
-
-/**
-  * Companion object for @see [[InMemoryEdgeSorter]]
-  */
-object InMemoryEdgeSorter {
-
-  /**
-    * The default amount of [[Edge]] which [[Edge.source]] node
-    * are placed in a node Bucket at maximum.
-    */
-  @inline val defaultSourceNodeMaxBucketSize : Int = 500
 }

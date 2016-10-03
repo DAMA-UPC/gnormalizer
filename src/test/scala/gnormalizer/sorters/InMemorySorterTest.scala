@@ -6,7 +6,10 @@ import org.specs2.specification.core.Fragments
 
 import scala.util.Random
 
-class InMemoryEdgeSorterTest extends Specification {
+/**
+  * Test @see [[InMemorySorter]]
+  */
+class InMemorySorterTest extends Specification {
 
   private[this] val testBucketSize: Int = 50
 
@@ -27,7 +30,7 @@ class InMemoryEdgeSorterTest extends Specification {
           "Test if the sorting is done as expected when using a single bucket" should {
             val numberTestEdges: Int = testBucketSize
             val bucketSize: Int = degree * testBucketSize
-            val sorter = InMemoryEdgeSorter(resultTreeNodeBucketKeySize = bucketSize)
+            val sorter = InMemorySorter(bucketSize)
             val testEdges: Seq[Edge] = generateTestEdges(numberTestEdges, degree)
             // Inserts the edges sequentially
             testEdges.foreach(sorter.addEdgeToResult)
@@ -44,7 +47,7 @@ class InMemoryEdgeSorterTest extends Specification {
           }
           "Test if the sorting is done as expected when using multiple buckets" should {
             val numVertex: Int = testBucketSize * 10
-            val sorter = InMemoryEdgeSorter(resultTreeNodeBucketKeySize = testBucketSize)
+            val sorter = InMemorySorter(testBucketSize)
             val testEdges: Seq[Edge] = generateTestEdges(numVertex, degree)
             // Expectations
             val expectedNumberOfBuckets: Int = numVertex / testBucketSize
@@ -62,7 +65,7 @@ class InMemoryEdgeSorterTest extends Specification {
           }
           val numParVertex: Int = 5000
           s"Test if $numParVertex Vertex adjacency's can be done in parallel" should {
-            val sorter = InMemoryEdgeSorter(resultTreeNodeBucketKeySize = testBucketSize)
+            val sorter = InMemorySorter(testBucketSize)
             val testEdges: Seq[Edge] = generateTestEdges(numParVertex, degree)
             // Expectations
             val expectedNumberOfBuckets: Int = numParVertex / testBucketSize
