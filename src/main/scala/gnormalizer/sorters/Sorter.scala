@@ -22,6 +22,12 @@ trait Sorter {
     * @return a [[Stream]] with the [[Edge]]'s ordered.
     */
   def resultStream(): Stream[Edge]
+
+  /**
+    * Obtains the number of buckets used during the class testings.
+    * Method really useful for testing porpoises.
+    */
+  def countNumberBuckets(): Int
 }
 
 /**

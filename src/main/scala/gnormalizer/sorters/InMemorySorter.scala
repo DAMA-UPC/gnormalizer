@@ -5,11 +5,11 @@ import gnormalizer.models.Edge
 import scala.collection.mutable
 
 /**
-  * Orders all the input [[Edge]] forcing not to use the disk in the process,
-  * forcing the memory usage during all the process.
+  * Orders all the input [[Edge]] forcing not to use the
+  * disk in the process, using the RAM memory instead.
   *
-  * @param maxBucketSize the maximum amount of key values in each bucket.
-  *                      The key values corresponds to the [[Edge.source]]
+  * @param maxBucketSize the maximum amount of [[gnormalizer.models.Vertex]] which adjacency's
+  *                      will be sorted in each internal bucket.
   */
 final case class InMemorySorter(maxBucketSize: Int = Sorter.defaultMaxBucketSize) extends Sorter {
 
@@ -57,8 +57,8 @@ final case class InMemorySorter(maxBucketSize: Int = Sorter.defaultMaxBucketSize
   }
 
   /**
-    * @return the number of buckets used for storing the sorting result.
+    * @inheritdoc
     */
-  private[sorters] def numberBuckets: Int = resultBuckets.size
+  override def countNumberBuckets(): Int = resultBuckets.size
 
 }
