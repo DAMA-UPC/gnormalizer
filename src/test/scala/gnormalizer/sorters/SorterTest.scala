@@ -22,9 +22,11 @@ abstract class SorterTest extends Specification {
     )
   }
 
-  private[this] val testGraphDegrees: Seq[Int] = Seq(1, 25)
+  @inline private[this] val graphDegreeToTest1 : Int = 1
+  @inline private[this] val graphDegreeToTest2 : Int = 25
+  @inline private[this] val graphDegreesToTest: Seq[Int] = Seq(graphDegreeToTest1, graphDegreeToTest2)
 
-  testGraphDegrees.foldLeft(Fragments()) {
+  graphDegreesToTest.foldLeft(Fragments()) {
     (fragments, degree) => {
       fragments.append(
         s"Inserts and sort graphs with degree: '$degree'" should {
@@ -87,3 +89,4 @@ abstract class SorterTest extends Specification {
     }
   }
 }
+
