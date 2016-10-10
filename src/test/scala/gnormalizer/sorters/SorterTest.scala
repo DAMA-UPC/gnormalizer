@@ -8,9 +8,9 @@ import scala.util.Random
 
 abstract class SorterTest extends Specification {
 
-  val numParallelVertex : Int
+  val numParallelVertex: Int
 
-  def generateSorter(bucketSize : Int): Sorter
+  def generateSorter(bucketSize: Int): Sorter
 
   private[this] val testBucketSize: Int = 50
 
@@ -22,11 +22,10 @@ abstract class SorterTest extends Specification {
     )
   }
 
-  @inline private[this] val graphDegreeToTest1 : Int = 1
-  @inline private[this] val graphDegreeToTest2 : Int = 25
-  @inline private[this] val graphDegreesToTest: Seq[Int] = Seq(graphDegreeToTest1, graphDegreeToTest2)
+  @inline private[this] val graphDegreeToTest1: Int = 1
+  @inline private[this] val graphDegreeToTest2: Int = 25
 
-  graphDegreesToTest.foldLeft(Fragments()) {
+  Seq(graphDegreeToTest1, graphDegreeToTest2).foldLeft(Fragments()) {
     (fragments, degree) => {
       fragments.append(
         s"Inserts and sort graphs with degree: '$degree'" should {
@@ -89,4 +88,3 @@ abstract class SorterTest extends Specification {
     }
   }
 }
-
