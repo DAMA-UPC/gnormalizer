@@ -29,9 +29,7 @@ object FileManager {
   @inline
   def removeDir(file: File): Unit = {
     if (file.isDirectory) {
-      for (file <- file.listFiles()) {
-        removeDir(file)
-      }
+      file.listFiles().foreach(removeDir)
     }
     file.delete()
   }
