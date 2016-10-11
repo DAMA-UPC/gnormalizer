@@ -2,10 +2,24 @@ package gnormalizer.sorters
 
 import gnormalizer.models.Edge
 
+import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
+
 /**
-  * Base trait for all graph sorters.
+  * Base Sorter for all graph sorters.
   */
 trait Sorter {
+
+  val maxBucketSize : Int
+
+  /**
+    * In-memory buffered [[Edge]]s.
+    */
+  protected final val inMemoryBuckets = MutableHashMap[Long, MutableTreeSet[Edge]]()
+
+  /**
+    * Counts the number of inserted [[Edge]]s.
+    */
+  private[this] var numberEdges: Long = 0
 
   /**
     * This method will be called when wanting to add an [[Edge]]
@@ -13,7 +27,25 @@ trait Sorter {
     *
     * @param edge that will be added to the result.
     */
-  def addEdgeToResult(edge: Edge): Unit
+  def addEdgeToResult(edge: Edge): Unit = {
+    val bucketId: Long = edge.source / maxBucketSize
+
+    inMemoryBuckets.get(bucketId) match {
+      case Some(bucket) =>
+        addEdgeToBucket(bucket, edge)
+      case _ =>
+        inMemoryBuckets.synchronized {
+          inMemoryBuckets.get(bucketId) match {
+            case Some(bucket) =>
+              addEdgeToBucket(bucket, edge)
+            case _ =>
+              val orderedBucketTree = MutableTreeSet.empty(ordering = Edge.ordering)
+              addEdgeToBucket(orderedBucketTree, edge)
+              inMemoryBuckets += (bucketId -> orderedBucketTree)
+          }
+        }
+    }
+  }
 
   /**
     * Initializes a [[Stream]] of all the [[Edge]]'s added previously
@@ -24,10 +56,28 @@ trait Sorter {
   def resultStream(): Stream[Edge]
 
   /**
-    * Obtains the number of buckets used during the class testings.
-    * Method really useful for testing porpoises.
+    * Obtains the number of buckets used during the sorting process.
     */
-  def countNumberBuckets(): Int
+  def countNumberBuckets(): Int = inMemoryBuckets.size
+
+  /**
+    * Obtains the number of processed [[Edge]]s.
+    */
+  def countNumberEdges(): Long = numberEdges
+
+  /**
+    * Adds an [[Edge]] to a specific in-memory bucket.
+    *
+    * @param bucket where the [[Edge]] will be inserted.
+    * @param edge   that will be inserted into the bucket.
+    */
+  @inline
+  protected def addEdgeToBucket(bucket: MutableTreeSet[Edge], edge: Edge) = {
+    bucket.synchronized {
+      bucket += edge
+      numberEdges += 1L
+    }
+  }
 }
 
 /**
