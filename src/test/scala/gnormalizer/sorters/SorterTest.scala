@@ -78,7 +78,7 @@ abstract class SorterTest extends Specification {
             val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
             val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
             // Expectations
-            val expectedNumberOfBuckets: Int = numParallelVertices / Sorter.defaultMaxVerticesPerBucket
+            val expectedNumberOfBuckets = numParallelVertices / Sorter.defaultMaxVerticesPerBucket
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
             // Tests:
