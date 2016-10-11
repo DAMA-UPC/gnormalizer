@@ -12,14 +12,14 @@ import scala.util.Random
 abstract class SorterTest extends Specification {
 
   /**
-    * Number of vertices used on the parallel tests.
-    */
-  val numParallelVertices: Int
-
-  /**
     * Generates a [[Sorter]] that will be used for the [[SorterTest]] tests.
     */
-  def generateSorter(bucketSize: Int): Sorter
+  def generateSorter(maxVerticesPerBucket: Int): Sorter
+
+  /**
+    * Number of [[gnormalizer.models.Vertex]] used for the parallel tests.
+    */
+  val numParallelVertices: Int
 
   private[this] val testBucketSize: Int = 50
 
@@ -75,10 +75,10 @@ abstract class SorterTest extends Specification {
             }
           }
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
-            val sorter = generateSorter(Sorter.defaultMaxBucketSize)
+            val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
             val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
             // Expectations
-            val expectedNumberOfBuckets: Int = numParallelVertices / Sorter.defaultMaxBucketSize
+            val expectedNumberOfBuckets: Int = numParallelVertices / Sorter.defaultMaxVerticesPerBucket
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
             // Tests:
