@@ -6,10 +6,19 @@ import org.specs2.specification.core.Fragments
 
 import scala.util.Random
 
+/**
+  * Base test for all sorters inhereting @see [[Sorter]].
+  */
 abstract class SorterTest extends Specification {
 
+  /**
+    * Number of vertices used on the parallel tests.
+    */
   val numParallelVertex: Int
 
+  /**
+    * Generates a [[Sorter]] that will be used for the [[SorterTest]] tests.
+    */
   def generateSorter(bucketSize: Int): Sorter
 
   private[this] val testBucketSize: Int = 50
@@ -39,7 +48,7 @@ abstract class SorterTest extends Specification {
             "Use only one bucket was used for doing the sorting" in {
               sorter.countNumberBuckets() must beEqualTo(1)
             }
-            s"The result must have ${numberTestEdges * degree} elements" in {
+            s"The result must have ${numberTestEdges * degree} elements in one bucket" in {
               sorter.resultStream().size must beEqualTo(numberTestEdges * degree)
             }
             s"Sorts the inserted $numberTestEdges edges as expected" in {
@@ -59,9 +68,9 @@ abstract class SorterTest extends Specification {
               sorter.countNumberBuckets() must beEqualTo(expectedNumberOfBuckets)
             }
             s"The result must have ${numVertex * degree} elements" in {
-              testEdges.size must beEqualTo(numVertex * degree)
+              sorter.countNumberEdges() must beEqualTo(numVertex * degree)
             }
-            s"Sorts the inserted $numVertex edges as expected" in {
+            s"Sorts the inserted $numVertex edges as expected using multiple buckets" in {
               testEdges.sortWith(_.compareTo(_) < 0) mustEqual sorter.resultStream().toIndexedSeq
             }
           }
@@ -73,13 +82,13 @@ abstract class SorterTest extends Specification {
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
             // Tests:
-            s"$expectedNumberOfBuckets buckets were used for doing the sorting" in {
+            s"$expectedNumberOfBuckets buckets were used for doing the sorting in parallel" in {
               sorter.countNumberBuckets() must beEqualTo(expectedNumberOfBuckets)
             }
-            s"The result must have ${numParallelVertex * degree} elements" in {
+            s"The result must have ${numParallelVertex * degree} parallel inserted elements" in {
               sorter.resultStream().size must beEqualTo(numParallelVertex * degree)
             }
-            s"Sorts the inserted ${numParallelVertex * degree} edges as expected" in {
+            s"Sorts the ${numParallelVertex * degree} parallel inserted edges as expected" in {
               testEdges.sortWith(_.compareTo(_) < 0) mustEqual sorter.resultStream().toIndexedSeq
             }
           }
