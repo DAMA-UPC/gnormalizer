@@ -7,5 +7,5 @@ class InMemorySorterTest extends SorterTest {
 
   override def generateSorter(numberBuckets : Int): InMemorySorter = InMemorySorter(numberBuckets)
 
-  override val numParallelVertex: Int = 10000
+  override val numParallelVertices: Int = 10000
 }

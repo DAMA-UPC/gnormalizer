@@ -7,14 +7,14 @@ import org.specs2.specification.core.Fragments
 import scala.util.Random
 
 /**
-  * Base test for all sorters inhereting @see [[Sorter]].
+  * Base test for all sorters inheriting @see [[Sorter]].
   */
 abstract class SorterTest extends Specification {
 
   /**
     * Number of vertices used on the parallel tests.
     */
-  val numParallelVertex: Int
+  val numParallelVertices: Int
 
   /**
     * Generates a [[Sorter]] that will be used for the [[SorterTest]] tests.
@@ -53,7 +53,7 @@ abstract class SorterTest extends Specification {
             }
             s"Sorts the inserted $numberTestEdges edges as expected" in {
               testEdges.sortWith(_.compareTo(_) < 0) must
-                beEqualTo(sorter.resultStream().toIndexedSeq)
+                beEqualTo(sorter.resultStream().toList)
             }
           }
           "Test if the sorting is done as expected when using multiple buckets" should {
@@ -74,22 +74,24 @@ abstract class SorterTest extends Specification {
               testEdges.sortWith(_.compareTo(_) < 0) mustEqual sorter.resultStream().toIndexedSeq
             }
           }
-          s"Test if $numParallelVertex Vertex adjacency's can be done in parallel" should {
-            val sorter = generateSorter(testBucketSize)
-            val testEdges: Seq[Edge] = generateTestEdges(numParallelVertex, degree)
+          s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
+            val sorter = generateSorter(Sorter.defaultMaxBucketSize)
+            val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
             // Expectations
-            val expectedNumberOfBuckets: Int = numParallelVertex / testBucketSize
+            val expectedNumberOfBuckets: Int = numParallelVertices / Sorter.defaultMaxBucketSize
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
             // Tests:
             s"$expectedNumberOfBuckets buckets were used for doing the sorting in parallel" in {
               sorter.countNumberBuckets() must beEqualTo(expectedNumberOfBuckets)
             }
-            s"The result must have ${numParallelVertex * degree} parallel inserted elements" in {
-              sorter.resultStream().size must beEqualTo(numParallelVertex * degree)
+            s"The result must have ${numParallelVertices * degree} parallel inserted elements" in {
+              sorter.resultStream().size must beEqualTo(numParallelVertices * degree)
             }
-            s"Sorts the ${numParallelVertex * degree} parallel inserted edges as expected" in {
-              testEdges.sortWith(_.compareTo(_) < 0) mustEqual sorter.resultStream().toIndexedSeq
+            s"Sorts the ${numParallelVertices * degree} parallel inserted edges as expected" in {
+              sorter.resultStream().toIndexedSeq must beEqualTo(
+                testEdges.sortWith(_.compareTo(_) < 0)
+              )
             }
           }
         }
