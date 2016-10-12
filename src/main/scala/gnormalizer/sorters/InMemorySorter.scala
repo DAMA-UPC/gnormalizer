@@ -1,8 +1,9 @@
 package gnormalizer.sorters
 
+import java.util.concurrent.atomic.AtomicLong
+
 import gnormalizer.models.Edge
 
-import scala.annotation.tailrec
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 
 /**
@@ -23,29 +24,29 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
   /**
     * Counts the number of inserted [[Edge]]s.
     */
-  private[this] var numberEdges: Long = 0
+  private[this] val numberEdges: AtomicLong = new AtomicLong(0L)
 
   /**
     * @inheritdoc
     */
-  @tailrec
-  override def addEdgeToResult(edge: Edge): Unit = {
+  override def addEdgeToResult(edge: Edge): Long = {
     val bucketId: Long = edge.source / maxVerticesPerBucket
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
         bucket.synchronized {
           bucket += edge
-          numberEdges += 1L
         }
       case _ =>
         inMemoryBuckets.synchronized {
-          if (!inMemoryBuckets.contains(bucketId)) {
-            inMemoryBuckets += (bucketId -> MutableTreeSet.empty(ordering = Edge.ordering))
-          }
+          inMemoryBuckets.
+            getOrElseUpdate(
+              key = bucketId,
+              op = MutableTreeSet.empty(ordering = Edge.ordering)
+            ) += edge
         }
-        addEdgeToResult(edge)
     }
+    numberEdges.incrementAndGet()
   }
 
   /**
@@ -70,5 +71,5 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
   /**
     * @inheritdoc
     */
-  override def countNumberEdges(): Long = numberEdges
+  override def countNumberEdges(): Long = numberEdges.get()
 }

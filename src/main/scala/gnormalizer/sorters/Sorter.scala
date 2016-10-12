@@ -2,7 +2,6 @@ package gnormalizer.sorters
 
 import gnormalizer.models.Edge
 
-
 /**
   * Base Sorter for all graph sorters.
   */
@@ -12,8 +11,10 @@ trait Sorter {
     * This method will be called when wanting to add an [[Edge]] to be ordered.
     *
     * @param edge that will be added to the result.
+    *
+    * @return the number of [[Edge]]s that has being already inserted.
     */
-  def addEdgeToResult(edge: Edge): Unit
+  def addEdgeToResult(edge: Edge): Long
 
   /**
     * Initializes a [[Stream]] of all the [[Edge]]'s added previously
