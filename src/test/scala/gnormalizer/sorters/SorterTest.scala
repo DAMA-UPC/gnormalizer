@@ -60,7 +60,6 @@ abstract class SorterTest extends Specification {
             val numVertex: Int = testBucketSize * 10
             val sorter = generateSorter(testBucketSize)
             val testEdges: Seq[Edge] = generateTestEdges(numVertex, degree)
-            // Expectations
             val expectedNumberOfBuckets: Int = numVertex / testBucketSize
             // Inserts the edges sequentially
             testEdges.foreach(sorter.addEdgeToResult)
@@ -77,11 +76,9 @@ abstract class SorterTest extends Specification {
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
             val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
             val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
-            // Expectations
             val expectedNumberOfBuckets = numParallelVertices / Sorter.defaultMaxVerticesPerBucket
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
-            // Tests:
             s"$expectedNumberOfBuckets buckets were used for doing the sorting in parallel" in {
               sorter.countNumberBuckets() must beEqualTo(expectedNumberOfBuckets)
             }
@@ -95,6 +92,25 @@ abstract class SorterTest extends Specification {
             }
           }
         }
+      )
+    }
+  }
+  val highDegree : Int = 25000
+  val highDegreeVertex : Int = 5
+  s"With $highDegreeVertex vertexes test if a graph degree of '$highDegree'" in {
+    val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
+    val testEdges: Seq[Edge] = generateTestEdges(highDegreeVertex, highDegree)
+    // Inserts all the test edges in parallel
+    testEdges.par.foreach(sorter.addEdgeToResult)
+    s"Only one bucket was used for doing the sorting in parallel" in {
+      sorter.countNumberBuckets() must beEqualTo(1L)
+    }
+    s"The result must contain ${highDegreeVertex * highDegree} elements" in {
+      sorter.resultStream().size must beEqualTo(highDegreeVertex * highDegree)
+    }
+    s"The ${highDegreeVertex * highDegree} vertices must be sorter in parallel" in {
+      sorter.resultStream().toIndexedSeq must beEqualTo(
+        testEdges.sortWith(_.compareTo(_) < 0)
       )
     }
   }
