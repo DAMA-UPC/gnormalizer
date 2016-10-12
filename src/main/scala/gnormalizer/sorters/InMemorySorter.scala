@@ -2,6 +2,7 @@ package gnormalizer.sorters
 
 import gnormalizer.models.Edge
 
+import scala.annotation.tailrec
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 
 /**
@@ -27,23 +28,23 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
   /**
     * @inheritdoc
     */
+  @tailrec
   override def addEdgeToResult(edge: Edge): Unit = {
     val bucketId: Long = edge.source / maxVerticesPerBucket
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
-        addEdgeToBucket(bucket, edge)
+        bucket.synchronized {
+          bucket += edge
+          numberEdges += 1L
+        }
       case _ =>
         inMemoryBuckets.synchronized {
-          inMemoryBuckets.get(bucketId) match {
-            case Some(bucket) =>
-              addEdgeToBucket(bucket, edge)
-            case _ =>
-              val orderedBucketTree = MutableTreeSet.empty(ordering = Edge.ordering)
-              addEdgeToBucket(orderedBucketTree, edge)
-              inMemoryBuckets += (bucketId -> orderedBucketTree)
+          if (!inMemoryBuckets.contains(bucketId)) {
+            inMemoryBuckets += (bucketId -> MutableTreeSet.empty(ordering = Edge.ordering))
           }
         }
+        addEdgeToResult(edge)
     }
   }
 
@@ -59,20 +60,6 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
       .collect { case Some(key) => key }
       .map(_.toStream)
       .foldLeft(Stream[Edge]())(_ #::: _)
-  }
-
-  /**
-    * Adds an [[Edge]] to a specific in-memory bucket.
-    *
-    * @param bucket where the [[Edge]] will be inserted.
-    * @param edge   that will be inserted into the bucket.
-    */
-  @inline
-  private[this] def addEdgeToBucket(bucket: MutableTreeSet[Edge], edge: Edge) = {
-    bucket.synchronized {
-      bucket += edge
-      numberEdges += 1L
-    }
   }
 
   /**
