@@ -26,9 +26,13 @@ abstract class SorterTest extends Specification {
   private[this] def generateTestEdges(numberEdges: Int, graphDegree: Int): Seq[Edge] = {
     Random.shuffle(
       (0 until numberEdges).
-        map(i => (0 until graphDegree).map(degree => Edge(i, degree))).
-        flatten
-    )
+        map(
+          vertex =>
+            (0 until graphDegree).
+              map(degree => Edge(vertex, degree))
+        )
+        .reduce(_ ++ _)
+    ).toList
   }
 
   @inline private[this] val graphDegreeToTest1: Int = 1
@@ -49,7 +53,7 @@ abstract class SorterTest extends Specification {
               sorter.countNumberBuckets() must beEqualTo(1)
             }
             s"The result must have ${numberTestEdges * degree} elements in one bucket" in {
-              sorter.resultStream().size must beEqualTo(numberTestEdges * degree)
+              sorter.countNumberEdges() must beEqualTo(numberTestEdges * degree)
             }
             s"Sorts the inserted $numberTestEdges edges as expected" in {
               testEdges.sortWith(_.compareTo(_) < 0) must
@@ -83,7 +87,7 @@ abstract class SorterTest extends Specification {
               sorter.countNumberBuckets() must beEqualTo(expectedNumberOfBuckets)
             }
             s"The result must have ${numParallelVertices * degree} parallel inserted elements" in {
-              sorter.resultStream().size must beEqualTo(numParallelVertices * degree)
+              sorter.countNumberEdges() must beEqualTo(numParallelVertices * degree)
             }
             s"Sorts the ${numParallelVertices * degree} parallel inserted edges as expected" in {
               sorter.resultStream().toIndexedSeq must beEqualTo(
@@ -97,7 +101,7 @@ abstract class SorterTest extends Specification {
   }
   val highDegree : Int = 25000
   val highDegreeVertex : Int = 5
-  s"With $highDegreeVertex vertexes test if a graph degree of '$highDegree'" in {
+  s"With '$highDegreeVertex' vertexes test a graph degree of '$highDegree'" in {
     val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
     val testEdges: Seq[Edge] = generateTestEdges(highDegreeVertex, highDegree)
     // Inserts all the test edges in parallel
@@ -106,7 +110,7 @@ abstract class SorterTest extends Specification {
       sorter.countNumberBuckets() must beEqualTo(1L)
     }
     s"The result must contain ${highDegreeVertex * highDegree} elements" in {
-      sorter.resultStream().size must beEqualTo(highDegreeVertex * highDegree)
+      sorter.countNumberEdges() must beEqualTo(highDegreeVertex * highDegree)
     }
     s"The ${highDegreeVertex * highDegree} vertices must be sorter in parallel" in {
       sorter.resultStream().toIndexedSeq must beEqualTo(
