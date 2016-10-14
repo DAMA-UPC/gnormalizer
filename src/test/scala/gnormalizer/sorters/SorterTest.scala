@@ -16,13 +16,6 @@ abstract class SorterTest extends Specification {
     */
   def generateSorter(maxVerticesPerBucket: Int): Sorter
 
-  /**
-    * Number of [[gnormalizer.models.Vertex]] used for the parallel tests.
-    */
-  val numParallelVertices: Int
-
-  private[this] val testBucketSize: Int = 50
-
   private[this] def generateTestEdges(numberEdges: Int, graphDegree: Int): Seq[Edge] = {
     Random.shuffle(
       (0 until numberEdges).
@@ -35,6 +28,8 @@ abstract class SorterTest extends Specification {
     ).toList
   }
 
+  @inline private[this] val testBucketSize: Int = 50
+  @inline private[this] val numParallelVertices: Int = 10000
   @inline private[this] val graphDegreeToTest1: Int = 1
   @inline private[this] val graphDegreeToTest2: Int = 25
 
@@ -56,8 +51,8 @@ abstract class SorterTest extends Specification {
               sorter.countNumberEdges() must beEqualTo(numberTestEdges * degree)
             }
             s"Sorts the inserted $numberTestEdges edges as expected" in {
-              testEdges.sortWith(_.compareTo(_) < 0) must
-                beEqualTo(sorter.resultStream().toList)
+              testEdges.sortWith(_.compareTo(_) < 0).
+                equals(sorter.resultStream().toList) must beTrue
             }
           }
           "Test if the sorting is done as expected when using multiple buckets" should {
@@ -74,7 +69,9 @@ abstract class SorterTest extends Specification {
               sorter.countNumberEdges() must beEqualTo(numVertex * degree)
             }
             s"Sorts the inserted $numVertex edges as expected using multiple buckets" in {
-              testEdges.sortWith(_.compareTo(_) < 0) mustEqual sorter.resultStream().toIndexedSeq
+              testEdges.sortWith(_.compareTo(_) < 0).equals(
+                sorter.resultStream().toIndexedSeq
+              ) must beTrue
             }
           }
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
@@ -90,32 +87,32 @@ abstract class SorterTest extends Specification {
               sorter.countNumberEdges() must beEqualTo(numParallelVertices * degree)
             }
             s"Sorts the ${numParallelVertices * degree} parallel inserted edges as expected" in {
-              sorter.resultStream().toIndexedSeq must beEqualTo(
+              sorter.resultStream().toIndexedSeq.equals(
                 testEdges.sortWith(_.compareTo(_) < 0)
-              )
+              ) must beTrue
             }
           }
         }
       )
     }
   }
-  val highDegree : Int = 25000
-  val highDegreeVertex : Int = 5
-  s"With '$highDegreeVertex' vertexes test a graph degree of '$highDegree'" in {
+  val highVertexDegree: Int = numParallelVertices / 2
+  val numberHighDegreeVertex: Int = 5
+  s"With '$numberHighDegreeVertex' vertexes test a graph degree of '$highVertexDegree'" in {
     val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
-    val testEdges: Seq[Edge] = generateTestEdges(highDegreeVertex, highDegree)
+    val testEdges: Seq[Edge] = generateTestEdges(numberHighDegreeVertex, highVertexDegree)
     // Inserts all the test edges in parallel
     testEdges.par.foreach(sorter.addEdgeToResult)
     s"Only one bucket was used for doing the sorting in parallel" in {
       sorter.countNumberBuckets() must beEqualTo(1L)
     }
-    s"The result must contain ${highDegreeVertex * highDegree} elements" in {
-      sorter.countNumberEdges() must beEqualTo(highDegreeVertex * highDegree)
+    s"The result must contain ${numberHighDegreeVertex * highVertexDegree} elements" in {
+      sorter.countNumberEdges() must beEqualTo(numberHighDegreeVertex * highVertexDegree)
     }
-    s"The ${highDegreeVertex * highDegree} vertices must be sorter in parallel" in {
-      sorter.resultStream().toIndexedSeq must beEqualTo(
+    s"The ${numberHighDegreeVertex * highVertexDegree} vertices must be sorter in parallel" in {
+      sorter.resultStream().toIndexedSeq.equals(
         testEdges.sortWith(_.compareTo(_) < 0)
-      )
+      ) must beTrue
     }
   }
 }
