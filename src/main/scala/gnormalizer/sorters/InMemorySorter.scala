@@ -39,11 +39,14 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
         }
       case _ =>
         inMemoryBuckets.synchronized {
-          inMemoryBuckets.
-            getOrElseUpdate(
-              key = bucketId,
-              op = MutableTreeSet.empty(ordering = Edge.ordering)
-            ) += edge
+          val bucket = {
+            inMemoryBuckets.
+              getOrElseUpdate(
+                key = bucketId,
+                op = MutableTreeSet.empty(ordering = Edge.ordering)
+              )
+          }
+          bucket.synchronized(bucket += edge)
         }
     }
     numberEdges.incrementAndGet()
