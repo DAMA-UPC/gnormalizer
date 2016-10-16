@@ -25,5 +25,6 @@ object FileStreamInitializer {
       .file
       .readAll[Task](Paths.get(path), chunkSize)
       .through(text.utf8Decode)
+      .through(text.lines)
   }
 }

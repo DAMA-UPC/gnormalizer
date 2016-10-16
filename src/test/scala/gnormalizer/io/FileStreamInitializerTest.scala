@@ -15,26 +15,20 @@ class FileStreamInitializerTest extends Specification {
 
   "initializeFileStream() method" should {
     val oneElementEdgeFilePath = "src/test/resources/edge_list/test_edge_list_one_element"
-    s"Works with files with no break lines: '$oneElementEdgeFilePath'" in {
+    s"Works with files with a single element on it: '$oneElementEdgeFilePath'" in {
       val rawFileContents: Vector[String] = initLoggedFileStream(oneElementEdgeFilePath)
-      s"All content from $oneElementEdgeFilePath is extracted without any type split" in {
-        rawFileContents must haveSize(1)
-      }
-      val expectedEdge: String = "0 1"
+      val expectedEdge: Seq[String] = Vector("0 1")
       s"Streams the expected file content: '$expectedEdge'" in {
-        rawFileContents must contain(expectedEdge)
+        rawFileContents must beEqualTo(expectedEdge)
       }
     }
 
     val simpleEdgeFilePath = "src/test/resources/edge_list/test_simple_edge_list"
     s"Works with files with break lines: '$simpleEdgeFilePath'" in {
       val rawFileContents: Vector[String] = initLoggedFileStream(simpleEdgeFilePath)
-      s"Extracts the content from $simpleEdgeFilePath without any type split" in {
-        rawFileContents must haveSize(1)
-      }
-      val expectedFileContent: String = "0 1\n1 2\n1 3\n1 9"
-      s"Streams the expected file content: '0 1\\1 2\\n1 3\\n1 9'" in {
-        rawFileContents must contain(expectedFileContent)
+      val expectedFileContent: Seq[String] = Vector("0 1", "1 2", "1 3", "1 9")
+      s"Streams the expected file content: '${expectedFileContent.toString}'" in {
+        rawFileContents must beEqualTo(expectedFileContent)
       }
     }
   }
