@@ -16,6 +16,12 @@ abstract class SorterTest extends Specification {
     */
   def generateSorter(maxVerticesPerBucket: Int): Sorter
 
+  /**
+    * Obtains the default maximum amount of [[gnormalizer.models.Vertex#source]]
+    * in a specific [[Sorter]] implementation.
+    */
+  def defaultNumberVertexesPerBucket : Int
+
   private[this] def generateTestEdges(numberEdges: Int, graphDegree: Int): Seq[Edge] = {
     Random.shuffle(
       (0 until numberEdges).
@@ -75,9 +81,9 @@ abstract class SorterTest extends Specification {
             }
           }
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
-            val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
+            val sorter = generateSorter(defaultNumberVertexesPerBucket)
             val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
-            val expectedNumberOfBuckets = numParallelVertices / Sorter.defaultMaxVerticesPerBucket
+            val expectedNumberOfBuckets = numParallelVertices / defaultNumberVertexesPerBucket
             // Inserts the edges in parallel
             testEdges.par.foreach(sorter.addEdgeToResult)
             s"$expectedNumberOfBuckets buckets were used for doing the sorting in parallel" in {
@@ -99,7 +105,7 @@ abstract class SorterTest extends Specification {
   val highVertexDegree: Int = numParallelVertices / 2
   val numberHighDegreeVertex: Int = 5
   s"With '$numberHighDegreeVertex' vertexes test a graph degree of '$highVertexDegree'" in {
-    val sorter = generateSorter(Sorter.defaultMaxVerticesPerBucket)
+    val sorter = generateSorter(defaultNumberVertexesPerBucket)
     val testEdges: Seq[Edge] = generateTestEdges(numberHighDegreeVertex, highVertexDegree)
     // Inserts all the test edges in parallel
     testEdges.par.foreach(sorter.addEdgeToResult)

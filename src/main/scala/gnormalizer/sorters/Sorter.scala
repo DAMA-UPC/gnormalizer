@@ -35,16 +35,3 @@ trait Sorter {
   def countNumberEdges(): Long
 
 }
-
-/**
-  * Companion object containing a set of default values
-  * that any sorter can use @see [[Sorter]]
-  */
-object Sorter {
-
-  /**
-    * The default amount of [[Edge]] which [[Edge.source]] node
-    * are placed in a node Bucket at maximum.
-    */
-  @inline val defaultMaxVerticesPerBucket = 500
-}

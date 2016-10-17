@@ -10,12 +10,11 @@ import gnormalizer.models.Edge
   */
 class DiskSorterTest extends SorterTest {
 
-  /**
-    * @inheritdoc
-    */
   override def generateSorter(bucketSize: Int): Sorter = {
     DiskSorter(maxVerticesPerBucket = bucketSize)
   }
+
+  override def defaultNumberVertexesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket
 
   "appendEdgeToFile() method" in {
     val edges: Seq[Edge] = (0 to 1).map(i => Edge(i, i))

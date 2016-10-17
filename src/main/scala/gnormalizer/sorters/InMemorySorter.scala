@@ -6,6 +6,8 @@ import gnormalizer.models.Edge
 
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 
+import InMemorySorter.defaultMaxVertexesPerBucket
+
 /**
   * Orders all the input [[Edge]] forcing not to use the
   * disk in the process, using the RAM memory instead.
@@ -13,7 +15,7 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * @param maxVerticesPerBucket the maximum amount of [[gnormalizer.models.Vertex]]
   *                             which adjacency's will be sorted in each internal bucket.
   */
-final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVerticesPerBucket
+final case class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBucket
                                ) extends Sorter {
 
   /**
@@ -75,4 +77,17 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVer
     * @inheritdoc
     */
   override def countNumberEdges(): Long = numberEdges.get()
+}
+
+/**
+  * Companion object containing a set of default values
+  * that any sorter can use @see [[Sorter]]
+  */
+object InMemorySorter {
+
+  /**
+    * The default amount of [[Edge]] which [[Edge.source]] node
+    * are placed in a node Bucket at maximum.
+    */
+  @inline val defaultMaxVertexesPerBucket = 250
 }

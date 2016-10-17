@@ -17,7 +17,7 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * @param maxVerticesPerBucket the maximum amount of key values in each bucket.
   *                      The key values corresponds to the [[Edge.source]]
   */
-final case class DiskSorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVerticesPerBucket,
+final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket,
                             maxEdgesPerBucket: Int = DiskSorter.defaultMaxEdgesPerBucket,
                             temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix
                            ) extends Sorter {
@@ -78,7 +78,7 @@ final case class DiskSorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVertice
       .collect { case (Some(key), filePath) => (key, filePath) }
       .collect {
         case (buffer, Some(diskBucket)) =>
-          // Sums the buffered edges to the ones stored in the HDD.
+          // There some stored edges on the HDD
           (MutableTreeSet.empty(Edge.ordering) ++ buffer ++ {
             diskBucket
               .toFile
@@ -91,6 +91,7 @@ final case class DiskSorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVertice
               }
           }).toStream
         case (buffer, _) =>
+          // There no stored edges on the HDD
           (MutableTreeSet.empty(Edge.ordering) ++ buffer).toStream
       }.foldLeft(Stream[Edge]())(_ #::: _)
   }
@@ -122,10 +123,16 @@ final case class DiskSorter(maxVerticesPerBucket: Int = Sorter.defaultMaxVertice
 object DiskSorter {
 
   /**
+    * Sets the maximum amount of different [[Edge.source]]
+    * that can fit in each internal [[DiskSorter]] bucket.
+    */
+  @inline val defaultMaxVertexesPerBucket = 1000
+
+  /**
     * Default max number of [[Edge]]s per buffered bucket before
     * starting to store that edge contents into disk.
     */
-  @inline val defaultMaxEdgesPerBucket = 1000
+  @inline val defaultMaxEdgesPerBucket = 10000
 
   /**
     * The location where the temporal stored files are located.
