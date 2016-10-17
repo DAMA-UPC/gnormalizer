@@ -10,6 +10,8 @@ addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.2.0")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.4.0")
 // https://github.com/codacy/sbt-codacy-coverage
 addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "1.3.4")
+// https://github.com/sbt/sbt-native-packager
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
 
 // ------------- SBT OPTIONS ----------- //
 logLevel := Level.Warn
