@@ -57,11 +57,9 @@ final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVer
         }
         numberEdges.incrementAndGet()
       case _ =>
-        bufferedEdges.synchronized {
-          if (!bufferedEdges.contains(bucketId)) {
-            bufferedEdges.put(bucketId, mutable.MutableList())
-          }
-        }
+        bufferedEdges.synchronized(
+          bufferedEdges.getOrElseUpdate(bucketId, mutable.MutableList())
+        )
         addEdgeToResult(edge)
     }
   }
