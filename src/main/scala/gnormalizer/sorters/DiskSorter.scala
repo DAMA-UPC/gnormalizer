@@ -77,7 +77,7 @@ final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVer
       .map(key => (bufferedEdges.get(key), filePaths.get(key)))
       .collect { case (Some(key), filePath) => (key, filePath) }
       .collect {
-        case (buffer, Some(diskBucket)) =>
+        case (buffer, Some(diskBucket)) => () => {
           // There some stored edges on the HDD
           (MutableTreeSet.empty(Edge.ordering) ++ buffer ++ {
             diskBucket
@@ -90,10 +90,11 @@ final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVer
                   Edge(source.toLong, target.toLong)
               }
           }).toStream
-        case (buffer, _) =>
+        }
+        case (buffer, _) => () =>
           // There no stored edges on the HDD
           (MutableTreeSet.empty(Edge.ordering) ++ buffer).toStream
-      }.foldLeft(Stream[Edge]())(_ #::: _)
+      }.foldLeft(Stream[Edge]())((acc, f) => acc #::: f())
   }
 
   /**
