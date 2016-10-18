@@ -18,7 +18,7 @@ libraryDependencies ++= {
 }
 
 // Test Dependencies
-resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases" // Nedeed for Scalamock
+resolvers += "ScalaMock Repository" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= {
   val specs2Version = "3.8.5"
@@ -53,3 +53,12 @@ scalacOptions in Test ++= Seq("-Yrangepos")
 parallelExecution in Test := true
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
+
+// Create a default Scala style task to run with tests
+lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
+compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
+(compile in Compile) <<= (compile in Compile) dependsOn compileScalastyle
+
+lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Test).toTask("").value
+(test in Test) <<= (test in Test) dependsOn testScalastyle
