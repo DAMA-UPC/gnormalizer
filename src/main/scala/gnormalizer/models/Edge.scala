@@ -5,7 +5,7 @@ import gnormalizer.models.Vertex.VertexMapping
 /**
   * Represents the connection between two [[Vertex]].
   */
-case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
+final case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
 
   /**
     * Overloads the default [[compareTo()]] method. During ordering the [[Edge]]
@@ -13,8 +13,10 @@ case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable
     * case the comparision between the [[Edge.target]] is returned instead.
     */
   @inline
+  @SuppressWarnings(Array("org.wartremover.warts.Equals")) // Performance reasons
   override def compareTo(other: Edge): Int = {
     val sourceComparision: Int = source.compareTo(other.source)
+    // The comparision will always be type-safe.
     if (sourceComparision == 0) {
       this.target.compareTo(other.target)
     } else {
@@ -41,7 +43,9 @@ object Edge {
   /**
     * Implicit ordering for [[Edge]]. Internally calls [[Edge.compareTo()]].
     */
-  implicit val ordering = new Ordering[Edge] {
-    def compare(p1: Edge, p2: Edge) = p1 compareTo p2
+  implicit val ordering: Ordering[Edge] = {
+    new Ordering[Edge] {
+      def compare(p1: Edge, p2: Edge) = p1 compareTo p2
+    }
   }
 }

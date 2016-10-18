@@ -22,7 +22,6 @@ final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVer
                             temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix
                            ) extends Sorter {
 
-
   private[this] val bufferedEdges = MutableHashMap[Long, mutable.MutableList[Edge]]()
   private[this] val filePaths = MutableHashMap[Long, String]()
 

@@ -36,9 +36,9 @@ final case class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPe
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
-        bucket.synchronized {
+        bucket.synchronized(
           bucket += edge
-        }
+        )
       case _ =>
         inMemoryBuckets.synchronized {
           val bucket = {

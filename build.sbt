@@ -25,13 +25,25 @@ libraryDependencies ++= {
   val specs2ScalaMockVersion = "3.3.0"
   val scalaCheckVersion = "1.13.2"
   Seq(
-    // Specs2 Test Framework - https://etorreborre.github.io/specs2/website/SPECS2-3.8.5/quickstart.html
+    // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
     "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test",
     "org.specs2" %% "specs2-junit" % specs2Version % "test",
     "org.specs2" %% "specs2-scalacheck" % specs2Version % "test",
+    // Scalamock - http://scalamock.org/
     "org.scalamock" %% "scalamock-specs2-support" % specs2ScalaMockVersion % "test",
+    // ScalaCheck - https://scalacheck.org/
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
+  )
+}
+
+// Static Code Analysis tools options
+wartremoverErrors ++= {
+  Warts.allBut(
+    Wart.DefaultArguments, // TODO: Move the defaults to configuration files.
+    Wart.MutableDataStructures, // We need them due the application performance requirements.
+    Wart.Var, // We need them due the application performance requirements.
+    Wart.NonUnitStatements // BetterFiles and Scala mutable collections APIs always return values.
   )
 }
 

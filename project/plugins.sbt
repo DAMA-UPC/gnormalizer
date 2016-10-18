@@ -12,6 +12,8 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.4.0")
 addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "1.3.4")
 // https://github.com/sbt/sbt-native-packager
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
+// https://github.com/puffnfresh/wartremover
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "1.1.1")
 
 // ------------- SBT OPTIONS ----------- //
 logLevel := Level.Warn
