@@ -16,6 +16,8 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
 addSbtPlugin("org.wartremover" % "sbt-wartremover" % "1.1.1")
 // http://www.scalastyle.org/sbt.html
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+// https://github.com/sksamuel/sbt-scapegoat
+addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.4")
 
 // ------------- SBT OPTIONS ----------- //
 logLevel := Level.Warn

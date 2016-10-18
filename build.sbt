@@ -4,7 +4,8 @@ version := "0.0.1"
 
 scalaVersion := "2.11.8"
 
-// Dependencies
+/*************   DEPENDENCIES   *************/
+
 libraryDependencies ++= {
   val fs2Version = "0.9.1"
   val betterFilesVersion = "2.16.0"
@@ -17,7 +18,8 @@ libraryDependencies ++= {
   )
 }
 
-// Test Dependencies
+/**********  TEST DEPENDENCIES   ************/
+
 resolvers += "ScalaMock Repository" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= {
@@ -37,7 +39,16 @@ libraryDependencies ++= {
   )
 }
 
-// Static Code Analysis tools options
+/*************   TEST OPTIONS   *************/
+
+scalacOptions in Test ++= Seq("-Yrangepos")
+
+parallelExecution in Test := true
+
+testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
+
+/************    WartRemover    *************/
+
 wartremoverErrors ++= {
   Warts.allBut(
     Wart.DefaultArguments, // TODO: Move the defaults to configuration files.
@@ -47,14 +58,18 @@ wartremoverErrors ++= {
   )
 }
 
-// Test Options
-scalacOptions in Test ++= Seq("-Yrangepos")
+/*************    Scapegoat    **************/
 
-parallelExecution in Test := true
+scapegoatVersion := "1.2.1"
+scapegoatDisabledInspections := Seq("RedundantFinalModifierOnCaseClass")
 
-testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
+(compile in Compile) <<= (compile in Compile) dependsOn scapegoat
+(test in Test) <<= (test in Test) dependsOn scapegoat
 
-// Create a default Scala style task to run with tests
+/************    ScalaStyle    **************/
+
+scalastyleFailOnError := true
 lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
 (compile in Compile) <<= (compile in Compile) dependsOn compileScalastyle
