@@ -14,10 +14,6 @@ import scala.collection.mutable
   */
 final class VertexIndexMapper {
 
-  // NOTE: In spite mutability is not a practice following functional
-  // programming practices, this class implements several mutable values,
-  // in order to improve the application performance.
-
   private[this] val vertexMappingCache: mutable.Map[InputVertex, VertexMapping] = {
     mutable.HashMap.empty[InputVertex, VertexMapping]
   }
