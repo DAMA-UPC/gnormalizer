@@ -17,7 +17,7 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * @param maxVerticesPerBucket the maximum amount of key values in each bucket.
   *                      The key values corresponds to the [[Edge.source]]
   */
-final case class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket,
+final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket,
                             maxEdgesPerBucket: Int = DiskSorter.defaultMaxEdgesPerBucket,
                             temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix
                            ) extends Sorter {

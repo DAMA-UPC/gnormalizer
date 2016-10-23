@@ -5,7 +5,7 @@ import gnormalizer.models.Vertex.VertexMapping
 /**
   * Represents the connection between two [[Vertex]].
   */
-final case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
+case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
 
   /**
     * Overloads the default [[compareTo()]] method. During ordering the [[Edge]]

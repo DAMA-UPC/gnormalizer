@@ -5,7 +5,9 @@ package gnormalizer.sorters
   */
 class InMemorySorterTest extends SorterTest {
 
-  override def generateSorter(numberBuckets : Int): InMemorySorter = InMemorySorter(numberBuckets)
+  override def generateSorter(maxVerticesPerBucket : Int): InMemorySorter = {
+    new InMemorySorter(maxVerticesPerBucket = maxVerticesPerBucket)
+  }
 
   override def defaultNumberVertexesPerBucket: Int = InMemorySorter.defaultMaxVertexesPerBucket
 }

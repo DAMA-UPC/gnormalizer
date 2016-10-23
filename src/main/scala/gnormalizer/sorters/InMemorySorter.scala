@@ -15,8 +15,7 @@ import InMemorySorter.defaultMaxVertexesPerBucket
   * @param maxVerticesPerBucket the maximum amount of [[gnormalizer.models.Vertex]]
   *                             which adjacency's will be sorted in each internal bucket.
   */
-final case class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBucket
-                               ) extends Sorter {
+final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBucket) extends Sorter {
 
   /**
     * In-memory buffered [[Edge]]s.

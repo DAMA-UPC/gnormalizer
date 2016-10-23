@@ -54,14 +54,14 @@ wartremoverErrors ++= {
     Wart.DefaultArguments, // TODO: Move the defaults to configuration files.
     Wart.MutableDataStructures, // We need them due the application performance requirements.
     Wart.Var, // We need them due the application performance requirements.
-    Wart.NonUnitStatements // BetterFiles and Scala mutable collections APIs always return values.
+    Wart.NonUnitStatements, // Mutable Scala collections APIs always return Unit values.
+    Wart.FinalCaseClass
   )
 }
 
 /*************    Scapegoat    **************/
 
 scapegoatVersion := "1.2.1"
-scapegoatDisabledInspections := Seq("RedundantFinalModifierOnCaseClass")
 
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
 (compile in Compile) <<= (compile in Compile) dependsOn scapegoat
