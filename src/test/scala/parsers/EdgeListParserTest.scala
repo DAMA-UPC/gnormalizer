@@ -1,11 +1,11 @@
 package parsers
 
 import fs2.{Stream, Task}
-import models.Edge
 import org.specs2.ScalaCheck
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
+import EdgeListParser.commentedLinesStartCharacters
 
 /**
   * Test for @see [[EdgeListParser]]
@@ -25,14 +25,15 @@ class EdgeListParserTest extends Specification with ScalaCheck {
         .replaceAll(" ", "")
         .replaceAll("\n", "")
         .replaceAll("\r", "")
+        .replaceAll("\u000b", "")
         .replaceAll("\u000c", "")
+        .replaceAll("\u0009", "")
     }
-    if (normalizedTestVertex.isEmpty) {
-      "TestVertex"
-    } else if (normalizedTestVertex.startsWith("#") || normalizedTestVertex.startsWith("//")) {
-      s"V$normalizedTestVertex"
-    } else {
-      normalizedTestVertex
+    normalizedTestVertex match {
+      case "" => "TestVertex"
+      case _ if commentedLinesStartCharacters.exists(normalizedTestVertex.startsWith) =>
+        s"V$normalizedTestVertex"
+      case _ => normalizedTestVertex
     }
   }
 
@@ -84,7 +85,6 @@ class EdgeListParserTest extends Specification with ScalaCheck {
             prop(
               (inputVertex: String) => {
                 val normalizedInputString = normalizeScalacheckVertexString(inputVertex)
-                // Empty vertices are obviously not supported, so a 'V' prefix has being added.
                 val inputEdge = s"$commentStart$normalizedInputString"
                 val singleEdgeStream = Stream.eval(Task.now(inputEdge))
                 checkResult(singleEdgeStream, 0)
