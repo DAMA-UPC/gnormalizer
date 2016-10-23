@@ -9,7 +9,7 @@ class FileStreamInitializerTest extends Specification {
 
   def initLoggedFileStream(filePath: String): Vector[String] =
     FileStreamInitializer.
-      initializeFileStream(filePath).
+      init(filePath).
       runLog.
       unsafeRun()
 

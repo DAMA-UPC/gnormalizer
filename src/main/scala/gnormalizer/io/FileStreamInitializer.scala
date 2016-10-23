@@ -9,18 +9,16 @@ import fs2.{Task, io, text, Stream => FileStream}
   */
 object FileStreamInitializer {
 
-  @inline val defaultChunkSize: Int = 4096
+  @inline val chunkSize: Int = 4096
 
   /**
     * Initializes a [[FileStream]] of an input file.
     *
-    * @param path      where the [[FileStream]] will start.
-    * @param chunkSize from the [[FileStream]].
+    * @param path where the [[FileStream]] will start.
     * @return a [[FileStream]] that will be return the graph contents as UTF-8 [[String]]'s.
     */
   @inline
-  def initializeFileStream(path: String,
-                           chunkSize: Int = defaultChunkSize): FileStream[Task, String] = {
+  def init(path: String): FileStream[Task, String] = {
     io
       .file
       .readAll[Task](Paths.get(path), chunkSize)
