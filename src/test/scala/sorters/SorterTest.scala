@@ -1,6 +1,6 @@
-package gnormalizer.sorters
+package sorters
 
-import gnormalizer.models.Edge
+import models.Edge
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.{Fragment, Fragments}
 
@@ -17,15 +17,16 @@ trait SorterTest extends Specification {
   def generateSorter(maxVerticesPerBucket: Int): Sorter
 
   /**
-    * Obtains the default maximum amount of [[gnormalizer.models.Vertex#source]]
+    * Obtains the default maximum amount of [[models.Vertex#source]]
     * in a specific [[Sorter]] implementation.
     */
   def defaultNumberVertexesPerBucket: Int
 
   /**
     * Generates a randomized list of test edges.
+ *
     * @param numberVertex which vertices will be generated.
-    * @param graphDegree  of the graph. All the [[gnormalizer.models.Vertex]] will have the @param
+    * @param graphDegree  of the graph. All the [[models.Vertex]] will have the @param
     *                     number of output [[Edge]]s.
     * @return a randomized sequence containing all he
     */

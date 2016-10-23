@@ -1,6 +1,6 @@
-package gnormalizer.sorters
+package sorters
 
-import gnormalizer.models.Edge
+import models.Edge
 
 /**
   * Base Sorter for all graph sorters.

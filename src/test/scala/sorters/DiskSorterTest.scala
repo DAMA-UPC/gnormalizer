@@ -1,7 +1,7 @@
-package gnormalizer.sorters
+package sorters
 
 import better.files._
-import gnormalizer.models.Edge
+import models.Edge
 
 /**
   * Test for @see [[DiskSorter]]

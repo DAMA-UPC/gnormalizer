@@ -1,4 +1,4 @@
-package gnormalizer.models
+package models
 
 /**
   * Type aliases for representing the Vertices identifiers in the application.

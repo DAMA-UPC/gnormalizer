@@ -1,10 +1,10 @@
-package gnormalizer.sorters
+package sorters
 
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 
 import better.files._
-import gnormalizer.models.Edge
+import models.Edge
 
 import scala.annotation.tailrec
 import scala.collection.mutable

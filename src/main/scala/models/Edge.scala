@@ -1,6 +1,6 @@
-package gnormalizer.models
+package models
 
-import gnormalizer.models.Vertex.VertexMapping
+import models.Vertex.VertexMapping
 
 /**
   * Represents the connection between two [[Vertex]].

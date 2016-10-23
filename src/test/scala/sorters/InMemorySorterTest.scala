@@ -1,4 +1,4 @@
-package gnormalizer.sorters
+package sorters
 
 /**
   * Test @see [[InMemorySorter]]

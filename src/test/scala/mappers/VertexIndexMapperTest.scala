@@ -1,6 +1,6 @@
-package gnormalizer.mappers
+package mappers
 
-import gnormalizer.models.Vertex.{InputVertex, VertexMapping}
+import models.Vertex.{InputVertex, VertexMapping}
 import org.specs2.mutable.Specification
 
 import scala.collection.immutable.HashMap

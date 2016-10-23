@@ -1,8 +1,8 @@
-package gnormalizer.sorters
+package sorters
 
 import java.util.concurrent.atomic.AtomicLong
 
-import gnormalizer.models.Edge
+import models.Edge
 
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 
@@ -12,7 +12,7 @@ import InMemorySorter.defaultMaxVertexesPerBucket
   * Orders all the input [[Edge]] forcing not to use the
   * disk in the process, using the RAM memory instead.
   *
-  * @param maxVerticesPerBucket the maximum amount of [[gnormalizer.models.Vertex]]
+  * @param maxVerticesPerBucket the maximum amount of [[models.Vertex]]
   *                             which adjacency's will be sorted in each internal bucket.
   */
 final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBucket) extends Sorter {
