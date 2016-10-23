@@ -23,9 +23,9 @@ libraryDependencies ++= {
 resolvers += "ScalaMock Repository" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= {
-  val specs2Version = "3.8.5"
+  val specs2Version = "3.8.5.1"
   val specs2ScalaMockVersion = "3.3.0"
-  val scalaCheckVersion = "1.13.2"
+  val scalaCheckVersion = "1.13.3"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
