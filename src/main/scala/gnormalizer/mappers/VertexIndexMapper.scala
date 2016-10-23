@@ -1,4 +1,4 @@
-package gnormalizer
+package gnormalizer.mappers
 
 import gnormalizer.models.Vertex
 import gnormalizer.models.Vertex.{InputVertex, VertexMapping}
