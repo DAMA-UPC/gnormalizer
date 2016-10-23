@@ -12,7 +12,7 @@ object EdgeListParser extends EdgeParser {
 
   private[this] val vertexIndexMapper: VertexIndexMapper = new VertexIndexMapper()
 
-  val commentedLinesStartCharacters : Seq[String] = Seq("#", "//")
+  val commentedLinesStartCharacters: Seq[String] = Seq("#", "//")
 
   /**
     * @inheritdoc
@@ -33,6 +33,7 @@ object EdgeListParser extends EdgeParser {
     * @return the parsed [[Edge]].
     */
   @inline
+  @SuppressWarnings(Array("org.wartremover.warts.Throw")) // FS2 manages failures with exceptions.
   private[this] def parseEdge(edgeString: String): Edge = {
     edgeString
       .trim // Removes the leading and the trailing spaces
@@ -42,6 +43,10 @@ object EdgeListParser extends EdgeParser {
         Edge(
           source = vertexIndexMapper.vertexMapping(sourceVertex),
           target = vertexIndexMapper.vertexMapping(targetVertex)
+        )
+      case invalidInput =>
+        throw new IllegalArgumentException(
+          s"Received ($invalidInput) on EdgeListParser, while the expected format is: 'a b'"
         )
     }
   }
