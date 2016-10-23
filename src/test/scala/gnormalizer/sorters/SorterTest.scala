@@ -7,9 +7,9 @@ import org.specs2.specification.core.{Fragment, Fragments}
 import scala.util.Random
 
 /**
-  * Base test for all sorters inheriting @see [[Sorter]].
+  * Base test for all the implementations from: @see [[Sorter]]
   */
-abstract class SorterTest extends Specification {
+trait SorterTest extends Specification {
 
   /**
     * Generates a [[Sorter]] that will be used for the [[SorterTest]] tests.
@@ -22,9 +22,16 @@ abstract class SorterTest extends Specification {
     */
   def defaultNumberVertexesPerBucket: Int
 
-  private[this] def generateTestEdges(numberEdges: Int, graphDegree: Int): Seq[Edge] = {
+  /**
+    * Generates a randomized list of test edges.
+    * @param numberVertex which vertices will be generated.
+    * @param graphDegree  of the graph. All the [[gnormalizer.models.Vertex]] will have the @param
+    *                     number of output [[Edge]]s.
+    * @return a randomized sequence containing all he
+    */
+  private[this] def generateTestEdges(numberVertex: Int, graphDegree: Int): Seq[Edge] = {
     Random.shuffle(
-      (0 until numberEdges).
+      (0 until numberVertex).
         map(
           vertex =>
             (0 until graphDegree).
@@ -34,11 +41,13 @@ abstract class SorterTest extends Specification {
     ).toList
   }
 
-  @inline
-  private[this] def testSuite(sorter: Sorter,
-                              parallelInsertion: Boolean,
-                              unorderedEdgesSeq: Seq[Edge],
-                              expectedNumberBuckets: Long): Fragment = {
+  /**
+    * Generates all the required test cases for any test case used in this class.
+    */
+  protected def baseTestFragments(sorter: Sorter,
+                                  parallelInsertion: Boolean,
+                                  unorderedEdgesSeq: Seq[Edge],
+                                  expectedNumberBuckets: Long): Fragment = {
     // Inserts the edges
     (parallelInsertion match {
       case true => unorderedEdgesSeq.par
@@ -69,7 +78,7 @@ abstract class SorterTest extends Specification {
         s"Inserts and sort graphs with degree: '$degree'" should {
           "Test if the sorting is done as expected when using a single bucket" should {
             // Single bucket expectations
-            testSuite(
+            baseTestFragments(
               sorter = generateSorter(maxVerticesPerBucket = testBucketSize),
               parallelInsertion = false,
               unorderedEdgesSeq = generateTestEdges(testBucketSize, degree),
@@ -77,14 +86,16 @@ abstract class SorterTest extends Specification {
             )
           }
           "Test if the sorting is done as expected when using multiple buckets" should {
-            val numVertex: Int = testBucketSize * 10
+            val bucketSize = 10
+            val numVertex: Int = bucketSize * bucketSize
+            val expectedNumberBuckets = numVertex / bucketSize
 
             // Multiple Bucket expectations
-            testSuite(
-              sorter = generateSorter(maxVerticesPerBucket = testBucketSize),
+            baseTestFragments(
+              sorter = generateSorter(maxVerticesPerBucket = bucketSize),
               parallelInsertion = false,
               unorderedEdgesSeq = generateTestEdges(numVertex, degree),
-              expectedNumberBuckets = numVertex / testBucketSize
+              expectedNumberBuckets = expectedNumberBuckets
             )
           }
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
@@ -92,7 +103,7 @@ abstract class SorterTest extends Specification {
             val expectedNumberOfBuckets = numParallelVertices / defaultNumberVertexesPerBucket
 
             // Parallel test expectations
-            testSuite(
+            baseTestFragments(
               sorter = generateSorter(maxVerticesPerBucket = defaultNumberVertexesPerBucket),
               parallelInsertion = true,
               unorderedEdgesSeq = testEdges,
@@ -107,7 +118,7 @@ abstract class SorterTest extends Specification {
   val numberHighDegreeVertex: Int = 5
   s"With '$numberHighDegreeVertex' vertexes test a graph degree of '$highVertexDegree'" in {
     // High Degree Vertex Expectations:
-    testSuite(
+    baseTestFragments(
       sorter = generateSorter(maxVerticesPerBucket = defaultNumberVertexesPerBucket),
       parallelInsertion = true,
       unorderedEdgesSeq = generateTestEdges(numberHighDegreeVertex, highVertexDegree),
