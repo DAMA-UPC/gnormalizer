@@ -76,8 +76,8 @@ trait SorterTest extends Specification {
     (fragments, degree) => {
       fragments.append(
         s"Inserts and sort graphs with degree: '$degree'" should {
+          // Single bucket expectations
           "Test if the sorting is done as expected when using a single bucket" should {
-            // Single bucket expectations
             baseTestFragments(
               sorter = generateSorter(maxVerticesPerBucket = testBucketSize),
               parallelInsertion = false,
@@ -85,12 +85,12 @@ trait SorterTest extends Specification {
               expectedNumberBuckets = 1L
             )
           }
+          // Multiple Bucket expectations
           "Test if the sorting is done as expected when using multiple buckets" should {
             val bucketSize = 10
-            val numVertex: Int = bucketSize * bucketSize
+            val numVertex: Int = bucketSize * 5
             val expectedNumberBuckets = numVertex / bucketSize
 
-            // Multiple Bucket expectations
             baseTestFragments(
               sorter = generateSorter(maxVerticesPerBucket = bucketSize),
               parallelInsertion = false,
@@ -98,11 +98,11 @@ trait SorterTest extends Specification {
               expectedNumberBuckets = expectedNumberBuckets
             )
           }
+          // Parallel test expectations
           s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
             val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
             val expectedNumberOfBuckets = numParallelVertices / defaultNumberVertexesPerBucket
 
-            // Parallel test expectations
             baseTestFragments(
               sorter = generateSorter(maxVerticesPerBucket = defaultNumberVertexesPerBucket),
               parallelInsertion = true,
