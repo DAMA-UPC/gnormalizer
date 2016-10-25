@@ -1,4 +1,5 @@
 name := "gnormalizer"
+organization := "edu.upc.dama"
 
 version := "0.0.1"
 
