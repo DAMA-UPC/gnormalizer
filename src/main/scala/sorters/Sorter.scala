@@ -11,7 +11,6 @@ trait Sorter {
     * This method will be called when wanting to add an [[Edge]] to be ordered.
     *
     * @param edge that will be added to the result.
-    *
     * @return the number of [[Edge]]s that has being already inserted.
     */
   def addEdgeToResult(edge: Edge): Long

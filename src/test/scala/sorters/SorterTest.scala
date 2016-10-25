@@ -24,7 +24,7 @@ trait SorterTest extends Specification {
 
   /**
     * Generates a randomized list of test edges.
- *
+    *
     * @param numberVertex which vertices will be generated.
     * @param graphDegree  of the graph. All the [[models.Vertex]] will have the @param
     *                     number of output [[Edge]]s.
