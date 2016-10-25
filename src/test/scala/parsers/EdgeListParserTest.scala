@@ -93,12 +93,20 @@ class EdgeListParserTest extends Specification with ScalaCheck {
           }
         )
     }
-    "When inputting two " in {
+    "Must work when inputting two valid Strings divided by several whitespaces" in {
       prop(
-        (a : String, b : String) => {
+        (a: String, b: String, numberWhitespaces: Byte) => {
           val normalizedA = normalizeScalacheckVertexString(a)
           val normalizedB = normalizeScalacheckVertexString(b)
-          val inputEdge = s"$normalizedA      $normalizedB"
+          val whitespaces: String = {
+            (for {
+              i <- 0 until Math.abs(numberWhitespaces) + 1
+            } yield " ").reduce(_ concat _) match {
+              case "" | " " => "  "
+              case severalWhitespaces => severalWhitespaces
+            }
+          }
+          val inputEdge = s"$normalizedA$whitespaces$normalizedB"
           checkResult(Stream.eval(Task.now(inputEdge)), 1)
         }
       )
@@ -113,6 +121,12 @@ class EdgeListParserTest extends Specification with ScalaCheck {
           .reduce(_ ++ _)
       }
       checkResult(expectation, numberOfInputEdges)
+    }
+    "When inputting an invalid value, return a failed Stream" in {
+      val invalidInputString: String = "a b c" // 3 vertices
+      val invalidInput: Stream[Task, String] = Stream.eval(Task.now(invalidInputString))
+      val stream = EdgeListParser.toEdgeStream(invalidInput)
+      stream.run.unsafeRun() must throwA[IllegalArgumentException]
     }
   }
 }
