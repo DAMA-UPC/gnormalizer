@@ -1,4 +1,4 @@
-package gnormalizer.mappers.io
+package io
 
 import java.nio.file.Paths
 

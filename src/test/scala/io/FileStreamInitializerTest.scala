@@ -1,4 +1,4 @@
-package gnormalizer.mappers.io
+package io
 
 import org.specs2.mutable.Specification
 
