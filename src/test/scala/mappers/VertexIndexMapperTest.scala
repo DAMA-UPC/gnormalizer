@@ -1,5 +1,6 @@
 package mappers
 
+import mappers.VertexIndexMapper.Mapping
 import models.Vertex.{InputVertex, VertexMapping}
 import org.specs2.mutable.Specification
 
@@ -16,7 +17,7 @@ class VertexIndexMapperTest extends Specification {
       mapper.numberMappings must beEqualTo(0)
     }
     "The vertexMapping() method returns an immutable empty map" in {
-      mapper.initMappingStream.toMap must beEqualTo(Map[InputVertex, VertexMapping]())
+      mapper.initMappingStream.toList must beEqualTo(List[VertexMapping]())
     }
   }
 
@@ -31,13 +32,13 @@ class VertexIndexMapperTest extends Specification {
       index must beEqualTo(0)
     }
     "The vertexMapping() method returns a mapping with the inserted element" in {
-      mapper.initMappingStream.toMap must beEqualTo(Map(testVertex -> 0))
+      mapper.initMappingStream.toList must beEqualTo(List(Mapping(testVertex, 0)))
     }
     "Return the same mapping if asking for the same element for a second time" in {
       val repeatedIndex: VertexMapping = mapper.vertexMapping(testVertex)
       (repeatedIndex must beEqualTo(index)) &&
         (mapper.initMappingStream.size must beEqualTo(1)) &&
-        (mapper.initMappingStream.toMap must beEqualTo(Map(testVertex -> 0)))
+        (mapper.initMappingStream.toList must beEqualTo(List(Mapping(testVertex, 0))))
     }
   }
 
@@ -55,20 +56,20 @@ class VertexIndexMapperTest extends Specification {
       index must beEqualTo(0 until numberVertex)
     }
     val mappingExpectation = {
-      (0 until numberVertex).foldLeft(HashMap[InputVertex, VertexMapping]()) {
+      (0 until numberVertex).foldLeft(List[Mapping]()) {
         (acc, i) => {
-          acc + (testVertex(i) -> i)
+          acc :+ Mapping(testVertex(i), i)
         }
       }
     }
     "The vertexMapping() method returns a mapping with the inserted elements" in {
-      mapper.initMappingStream.toMap must beEqualTo(mappingExpectation)
+      mapper.initMappingStream.toList must beEqualTo(mappingExpectation)
     }
     "Return the same mappings if asking for the same elements for a second time" in {
       val duplicatedIndexes: Seq[VertexMapping] = testVertex.map(mapper.vertexMapping)
       (duplicatedIndexes must beEqualTo(index)) &&
         (mapper.initMappingStream.size must beEqualTo(numberVertex)) &&
-        (mapper.initMappingStream.toMap must beEqualTo(mappingExpectation))
+        (mapper.initMappingStream.toList must beEqualTo(mappingExpectation))
     }
   }
 
@@ -87,8 +88,8 @@ class VertexIndexMapperTest extends Specification {
       mapper.numberMappings must beEqualTo(1)
     }
     "The vertexMapping() method returns a map with only one mapping" in {
-      val expectedMappings = Map[InputVertex, VertexMapping](repeatedElement -> 0)
-      mapper.initMappingStream.toMap must beEqualTo(expectedMappings)
+      val expectedMappings = Seq(Mapping(repeatedElement, 0L))
+      mapper.initMappingStream.toList must beEqualTo(expectedMappings)
     }
   }
 

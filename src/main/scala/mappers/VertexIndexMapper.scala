@@ -48,8 +48,8 @@ final class VertexIndexMapper {
     * Obtains the mapping from all the indexed [[Vertex]] as
     * a [[MemoryStream[[(Vertex, VertexMappingId)]]]].
     */
-  def initMappingStream: MemoryStream[(InputVertex, VertexMapping)] = {
-    vertexMappingCache.toStream
+  def initMappingStream: MemoryStream[VertexIndexMapper.Mapping] = {
+    vertexMappingCache.toSeq.map(VertexIndexMapper.Mapping.tupled).sortBy(_.mappedAs).toStream
   }
 
   /**
@@ -57,4 +57,16 @@ final class VertexIndexMapper {
     * @return [[Long]] with the number of mappings.
     */
   def numberMappings : Long = mappingCacheSize
+}
+
+/**
+  * Companion object for @see [[VertexIndexMapper]]
+  */
+object VertexIndexMapper {
+
+  /**
+    * Represents the mapping done to a [[Vertex]].
+    */
+  case class Mapping(input: InputVertex, mappedAs: VertexMapping)
+
 }
