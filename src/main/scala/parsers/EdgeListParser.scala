@@ -1,16 +1,13 @@
 package parsers
 
 import fs2.{Stream, Task}
-import mappers.VertexIndexMapper
 import models.Edge
 import models.Vertex._
 
 /**
   * [[Edge]] Parser for 'Edge List' inputs.
   */
-object EdgeListParser extends EdgeParser {
-
-  private[this] val vertexIndexMapper: VertexIndexMapper = new VertexIndexMapper()
+class EdgeListParser extends EdgeParser {
 
   val commentedLinesStartCharacters: Seq[String] = Seq("#", "//")
 
@@ -19,10 +16,10 @@ object EdgeListParser extends EdgeParser {
     */
   override def toEdgeStream(inputStream: Stream[Task, String]): Stream[Task, Edge] = {
     inputStream
-      .map(_.trim)
+      .map(_.trim) // Removes the leading and the trailing spaces
+      .map(_.replaceAll("\\s+", " ")) // Converts consecutive whitespaces into a single one
       // Removes all the commented or empty lines
       .filter(line => !line.isEmpty && !commentedLinesStartCharacters.exists(line.startsWith))
-      .map(_.replaceAll("\\s+", " "))
       .map(parseEdge)
   }
 
@@ -33,11 +30,10 @@ object EdgeListParser extends EdgeParser {
     * @return the parsed [[Edge]].
     */
   @inline
+  @throws[IllegalArgumentException]
   @SuppressWarnings(Array("org.wartremover.warts.Throw")) // FS2 manages failures with exceptions.
-  private[this] def parseEdge(edgeString: String): Edge = {
+  protected def parseEdge(edgeString: String): Edge = {
     edgeString
-      .trim // Removes the leading and the trailing spaces
-      .replaceAll("\\s+", " ") // Removes
       .split(" ") match {
       case Array(sourceVertex: InputVertex, targetVertex: InputVertex) =>
         Edge(

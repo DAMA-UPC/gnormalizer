@@ -1,17 +1,19 @@
 package parsers
 
 import fs2.{Stream, Task}
+import models.Edge
 import org.specs2.ScalaCheck
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
-import EdgeListParser.commentedLinesStartCharacters
 
 /**
   * Test for @see [[EdgeListParser]]
   */
 @SuppressWarnings(Array("org.wartremover.warts.Any")) // Can't use ScalaCheck otherwise
 class EdgeListParserTest extends Specification with ScalaCheck {
+
+  private[this] val parser : EdgeListParser = new EdgeListParser()
 
   /**
     * Normalizes a ScalaCheck vertex string to do have any invalid parameter such as,
@@ -31,7 +33,7 @@ class EdgeListParserTest extends Specification with ScalaCheck {
     }
     normalizedTestVertex match {
       case "" => "TestVertex"
-      case _ if commentedLinesStartCharacters.exists(normalizedTestVertex.startsWith) =>
+      case _ if parser.commentedLinesStartCharacters.exists(normalizedTestVertex.startsWith) =>
         s"V$normalizedTestVertex"
       case _ => normalizedTestVertex
     }
@@ -42,7 +44,7 @@ class EdgeListParserTest extends Specification with ScalaCheck {
     */
   private[this] def checkResult(input: Stream[Task, String],
                                 numberOfEdges: Int): MatchResult[_] = {
-    EdgeListParser.toEdgeStream(input).runLog.unsafeRun().size must beEqualTo(numberOfEdges)
+    parser.toEdgeStream(input).runLog.unsafeRun().size must beEqualTo(numberOfEdges)
   }
 
   "toStream() method" should {
@@ -78,7 +80,7 @@ class EdgeListParserTest extends Specification with ScalaCheck {
         }
       )
     }
-    EdgeListParser.commentedLinesStartCharacters.foldLeft(Fragments()) {
+    parser.commentedLinesStartCharacters.foldLeft(Fragments()) {
       (acc, commentStart) =>
         acc.append(
           s"It must ignore edges starting with '$commentStart'" in {
@@ -125,7 +127,7 @@ class EdgeListParserTest extends Specification with ScalaCheck {
     "When inputting an invalid value, return a failed Stream" in {
       val invalidInputString: String = "a b c" // 3 vertices
       val invalidInput: Stream[Task, String] = Stream.eval(Task.now(invalidInputString))
-      val stream = EdgeListParser.toEdgeStream(invalidInput)
+      val stream : Stream[Task, Edge] = parser.toEdgeStream(invalidInput)
       stream.run.unsafeRun() must throwA[IllegalArgumentException]
     }
   }
