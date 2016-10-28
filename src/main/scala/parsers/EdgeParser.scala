@@ -6,7 +6,7 @@ import mappers.VertexIndexMapper.Mapping
 import models.Edge
 
 /**
-  * Object representing an [[Edge]] parser.
+  * Base trait for all [[Edge]] parsers.
   */
 trait EdgeParser {
 
@@ -21,8 +21,8 @@ trait EdgeParser {
   def toEdgeStream(inputStream: fs2.Stream[Task, String]): fs2.Stream[Task, Edge]
 
   /**
-    * Initializes an [[Stream]] specifying the output Str
-    * @return
+    * Initializes an [[Stream]] specifying the the [[models.Vertex]] [[Mapping]]s.
+    * @return an [[Stream]] containing all the [[models.Vertex]] mappings.
     */
   def mappingsStream() : Stream[Mapping] = vertexIndexMapper.initMappingStream
 
