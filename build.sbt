@@ -65,7 +65,7 @@ wartremoverErrors ++= {
 scapegoatVersion := "1.2.1"
 
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
-(test in Test) <<= (test in Test) dependsOn scapegoat
+(test in Test) := ((test in Test) dependsOn scapegoat).value
 
 /************    ScalaStyle    **************/
 
@@ -73,4 +73,4 @@ scalastyleFailOnError := true
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Test).toTask("").value
-(test in Test) <<= (test in Test) dependsOn testScalastyle
+(test in Test) := ((test in Test) dependsOn testScalastyle).value
