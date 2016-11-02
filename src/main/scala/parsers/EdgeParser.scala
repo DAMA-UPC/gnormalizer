@@ -21,7 +21,9 @@ trait EdgeParser {
   def toEdgeStream(inputStream: fs2.Stream[Task, String]): fs2.Stream[Task, Edge]
 
   /**
-    * Initializes an [[Stream]] specifying the the [[models.Vertex]] [[Mapping]]s.
+    * Initializes an [[Stream]] specifying the the [[models.Vertex]] [[Mapping]]s
+    * from all the elements that have been converted calling [[EdgeParser.toEdgeStream]].
+    *
     * @return an [[Stream]] containing all the [[models.Vertex]] mappings.
     */
   def mappingsStream() : Stream[Mapping] = vertexIndexMapper.initMappingStream
