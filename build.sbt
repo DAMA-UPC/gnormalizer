@@ -8,7 +8,7 @@ scalaVersion := "2.11.8"
 /*************   DEPENDENCIES   *************/
 
 libraryDependencies ++= {
-  val fs2Version = "0.9.1"
+  val fs2Version = "0.9.2"
   val betterFilesVersion = "2.16.0"
   Seq(
     // https://github.com/functional-streams-for-scala/fs2
@@ -21,20 +21,15 @@ libraryDependencies ++= {
 
 /**********  TEST DEPENDENCIES   ************/
 
-resolvers += "ScalaMock Repository" at "http://dl.bintray.com/scalaz/releases"
-
 libraryDependencies ++= {
-  val specs2Version = "3.8.5.1"
-  val specs2ScalaMockVersion = "3.3.0"
-  val scalaCheckVersion = "1.13.3"
+  val specs2Version = "3.8.6"
+  val scalaCheckVersion = "1.13.4"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
     "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test",
     "org.specs2" %% "specs2-junit" % specs2Version % "test",
     "org.specs2" %% "specs2-scalacheck" % specs2Version % "test",
-    // Scalamock - http://scalamock.org/
-    "org.scalamock" %% "scalamock-specs2-support" % specs2ScalaMockVersion % "test",
     // ScalaCheck - https://scalacheck.org/
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
   )
@@ -52,10 +47,10 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
 
 wartremoverErrors ++= {
   Warts.allBut(
-    Wart.DefaultArguments, // TODO: Move the defaults to configuration files.
     Wart.MutableDataStructures, // We need them due the application performance requirements.
     Wart.Var, // We need them due the application performance requirements.
     Wart.NonUnitStatements, // Mutable Scala collections APIs always return Unit values.
+    Wart.DefaultArguments,
     Wart.FinalCaseClass
   )
 }
