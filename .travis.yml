@@ -13,12 +13,6 @@ script:
   - sbt coverageAggregate
   - sbt codacyCoverage
 
-script:
-  - sbt coverage test
-  - sbt coverageReport
-  - sbt coverageAggregate
-  - sbt codacyCoverage
-
 cache:
   directories:
     - $HOME/.m2/repository
