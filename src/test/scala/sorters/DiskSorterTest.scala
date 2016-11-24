@@ -31,7 +31,7 @@ class DiskSorterTest extends SorterTest {
       // Assert 1: There must be two generated files.
       (multipleBucketsSorter.usedFilePaths().size must beEqualTo(edges.size)) &&
         // Assert 2: The generated file must contain both inserted edges, in any order.
-        (multipleBucketsSorter.usedFilePaths().map(_.toFile.lines).reduce(_ ++ _).toSeq
+        (multipleBucketsSorter.usedFilePaths().map(_.toFile.lines).foldLeft(Seq[String]())(_ ++ _)
           must containAllOf(edges.map(_.toString)))
     }
   }

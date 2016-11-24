@@ -120,7 +120,7 @@ class EdgeListParserTest extends Specification with ScalaCheck {
         (0 until numberOfInputEdges)
           .map(i => s"$i $i")
           .map(a => Stream.eval(Task.now(a)))
-          .reduce(_ ++ _)
+          .foldLeft(Stream[Task, String]())(_ ++ _)
       }
       checkResult(parser, expectation, numberOfInputEdges)
     }

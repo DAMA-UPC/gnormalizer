@@ -38,7 +38,7 @@ trait SorterTest extends Specification {
             (0 until graphDegree).
               map(degree => Edge(vertex, degree))
         )
-        .reduce(_ ++ _)
+        .foldLeft(Seq[Edge]())(_ ++ _)
     ).toList
   }
 
