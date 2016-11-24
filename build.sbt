@@ -57,7 +57,7 @@ wartremoverErrors ++= {
 
 /*************    Scapegoat    **************/
 
-scapegoatVersion := "1.2.1"
+scapegoatVersion := "1.3.0"
 
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
 (test in Test) := ((test in Test) dependsOn scapegoat).value
