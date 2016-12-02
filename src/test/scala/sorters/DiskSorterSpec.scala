@@ -6,9 +6,9 @@ import models.Edge
 /**
   * Test for @see [[DiskSorter]]
   *
-  * Inherits all the test from @see [[SorterTest]]
+  * Inherits all the test from @see [[SorterSpec]]
   */
-class DiskSorterTest extends SorterTest {
+class DiskSorterSpec extends SorterSpec {
 
   override def generateSorter(maxVerticesPerBucket: Int): Sorter = {
     new DiskSorter(maxVerticesPerBucket = maxVerticesPerBucket)

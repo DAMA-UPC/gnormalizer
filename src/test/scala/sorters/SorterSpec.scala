@@ -9,10 +9,10 @@ import scala.util.Random
 /**
   * Base test for all the implementations from: @see [[Sorter]]
   */
-trait SorterTest extends Specification {
+trait SorterSpec extends Specification {
 
   /**
-    * Generates a [[Sorter]] that will be used for the [[SorterTest]] tests.
+    * Generates a [[Sorter]] that will be used for the [[SorterSpec]] tests.
     */
   def generateSorter(maxVerticesPerBucket: Int): Sorter
 

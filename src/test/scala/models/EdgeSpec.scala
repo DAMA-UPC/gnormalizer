@@ -9,7 +9,7 @@ import org.specs2.mutable.Specification
 /**
   * Test for: @see [[Edge]]
   */
-class EdgeTest extends Specification with ScalaCheck {
+class EdgeSpec extends Specification with ScalaCheck {
 
   "compareTo method" should {
     def any: VertexMapping = new SecureRandom().nextInt()

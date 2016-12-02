@@ -5,7 +5,7 @@ import org.specs2.mutable.Specification
 /**
   * Test for @see [[FileStreamInitializer]]
   */
-class FileStreamInitializerTest extends Specification {
+class FileStreamInitializerSpec extends Specification {
 
   def initLoggedFileStream(filePath: String): Vector[String] =
     FileStreamInitializer.

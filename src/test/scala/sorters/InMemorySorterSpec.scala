@@ -3,7 +3,7 @@ package sorters
 /**
   * Test @see [[InMemorySorter]]
   */
-class InMemorySorterTest extends SorterTest {
+class InMemorySorterSpec extends SorterSpec {
 
   override def generateSorter(maxVerticesPerBucket : Int): InMemorySorter = {
     new InMemorySorter(maxVerticesPerBucket = maxVerticesPerBucket)

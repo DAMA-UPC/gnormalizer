@@ -9,7 +9,7 @@ import scala.collection.immutable.HashMap
 /**
   * Test for @see [[VertexIndexMapper]]
   */
-class VertexIndexMapperTest extends Specification {
+class VertexIndexMapperSpec extends Specification {
 
   "Test an empty mapper" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()

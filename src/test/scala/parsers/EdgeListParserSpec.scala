@@ -10,7 +10,7 @@ import org.specs2.specification.core.Fragments
 /**
   * Test for @see [[EdgeListParser]]
   */
-class EdgeListParserTest extends Specification with ScalaCheck {
+class EdgeListParserSpec extends Specification with ScalaCheck {
 
   /**
     * Normalizes a ScalaCheck vertex string to do have any invalid parameter such as,

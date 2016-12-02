@@ -5,7 +5,7 @@ import org.specs2.mutable.Specification
 /**
   * Test cases for @see [[SorterSelector]]
   */
-class SorterSelectorTest extends Specification {
+class SorterSelectorSpec extends Specification {
 
   "When the file size is lower than the threshold, return a InMemorySorter " in {
     val fileSizeLowerThreshold: Long = SorterSelector.thresholdToDiskSorterInKilobytes - 1
