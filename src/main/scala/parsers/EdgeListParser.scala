@@ -7,7 +7,7 @@ import models.Vertex._
 /**
   * [[Edge]] Parser for 'Edge List' inputs.
   */
-class EdgeListParser extends EdgeParser {
+class EdgeListParser extends GraphParser {
 
   val commentedLinesStartCharacters: Seq[String] = Seq("#", "//")
 

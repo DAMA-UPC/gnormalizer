@@ -8,7 +8,7 @@ import models.Edge
 /**
   * Base trait for all [[Edge]] parsers.
   */
-trait EdgeParser {
+trait GraphParser {
 
   protected val vertexIndexMapper: VertexIndexMapper = new VertexIndexMapper()
 
@@ -22,7 +22,7 @@ trait EdgeParser {
 
   /**
     * Initializes an [[Stream]] specifying the the [[models.Vertex]] [[Mapping]]s
-    * from all the elements that have been converted calling [[EdgeParser.toEdgeStream]].
+    * from all the elements that have been converted calling [[GraphParser.toEdgeStream]].
     *
     * @return an [[Stream]] containing all the [[models.Vertex]] mappings.
     */
