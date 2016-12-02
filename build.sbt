@@ -45,7 +45,7 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v", "-s", "-a")
 
 /************    WartRemover    *************/
 
-wartremoverErrors ++= {
+wartremoverErrors in (Compile, compile) ++= {
   Warts.allBut(
     Wart.MutableDataStructures, // We need them due the application performance requirements.
     Wart.Var, // We need them due the application performance requirements.
@@ -54,6 +54,7 @@ wartremoverErrors ++= {
     Wart.FinalCaseClass
   )
 }
+wartremoverErrors in (Test, test) ++= Warts.allBut(Wart.FinalCaseClass, Wart.NonUnitStatements)
 
 /*************    Scapegoat    **************/
 

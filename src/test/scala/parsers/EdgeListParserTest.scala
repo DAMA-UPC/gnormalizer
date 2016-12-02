@@ -10,7 +10,6 @@ import org.specs2.specification.core.Fragments
 /**
   * Test for @see [[EdgeListParser]]
   */
-@SuppressWarnings(Array("org.wartremover.warts.Any")) // Can't use ScalaCheck otherwise
 class EdgeListParserTest extends Specification with ScalaCheck {
 
   /**

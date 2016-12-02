@@ -9,7 +9,6 @@ import org.specs2.mutable.Specification
 /**
   * Test for: @see [[Edge]]
   */
-@SuppressWarnings(Array("org.wartremover.warts.Any")) // Can't use ScalaCheck otherwise
 class EdgeTest extends Specification with ScalaCheck {
 
   "compareTo method" should {
