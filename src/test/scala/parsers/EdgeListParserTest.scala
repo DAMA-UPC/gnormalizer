@@ -65,13 +65,11 @@ class EdgeListParserTest extends Specification with ScalaCheck {
     "Must work when inputting with edges in numerical input edges" in {
       prop(
         (a: Long, b: Long) => {
-          val singleEdgeStream = Stream.eval(Task.now(s"$a $b"))
-          checkResult(parser, singleEdgeStream, 1)
+          parser.toEdgeStream(Stream.pure(s"$a $b")).runLog.unsafeRun().size must beEqualTo(1L)
         }
       )
     }
     "Must work when inputting edges in non-numerical input edges" in {
-
       prop(
         (sourceVertex: String, targetVertex: String) => {
           // Empty vertices are obviously not supported, so a 'V' prefix has being added.
