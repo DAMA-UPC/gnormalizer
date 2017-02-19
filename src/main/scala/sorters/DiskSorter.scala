@@ -124,13 +124,13 @@ object DiskSorter {
     * Sets the maximum amount of different [[Edge.source]]
     * that can fit in each internal [[DiskSorter]] bucket.
     */
-  @inline val defaultMaxVertexesPerBucket = 1000
+  @inline val defaultMaxVertexesPerBucket: Int = 1000
 
   /**
     * Default max number of [[Edge]]s per buffered bucket before
     * starting to store that edge contents into disk.
     */
-  @inline val defaultMaxEdgesPerBucket = 10000
+  @inline val defaultMaxEdgesPerBucket: Int = 10000
 
   /**
     * The location where the temporal stored files are located.
