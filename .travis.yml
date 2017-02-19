@@ -1,11 +1,8 @@
 language: scala
 
-scala: 2.11.8
+scala: 2.12.1
 
 jdk: oraclejdk8
-
-before_script:
-  - export CODACY_PROJECT_TOKEN=1969eacac7ce42d8a8acdb9f489c1e78
 
 script:
   - sbt clean coverage test
