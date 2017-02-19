@@ -44,7 +44,7 @@ final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBuck
             inMemoryBuckets.
               getOrElseUpdate(
                 key = bucketId,
-                op = MutableTreeSet.empty(ordering = Edge.ordering)
+                defaultValue = MutableTreeSet.empty(ordering = Edge.ordering)
               )
           }
           bucket.synchronized(bucket += edge)
@@ -88,5 +88,5 @@ object InMemorySorter {
     * The default amount of [[Edge]] which [[Edge.source]] node
     * are placed in a node Bucket at maximum.
     */
-  @inline val defaultMaxVertexesPerBucket = 250
+  @inline val defaultMaxVertexesPerBucket: Int = 250
 }

@@ -3,13 +3,13 @@ organization := "edu.upc.dama"
 
 version := "0.0.1"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 
 /*************   DEPENDENCIES   *************/
 
 libraryDependencies ++= {
-  val fs2Version = "0.9.2"
-  val betterFilesVersion = "2.16.0"
+  val fs2Version = "0.9.4"
+  val betterFilesVersion = "2.17.1"
   Seq(
     // https://github.com/functional-streams-for-scala/fs2
     "co.fs2" %% "fs2-core" % fs2Version,
@@ -22,7 +22,7 @@ libraryDependencies ++= {
 /**********  TEST DEPENDENCIES   ************/
 
 libraryDependencies ++= {
-  val specs2Version = "3.8.6"
+  val specs2Version = "3.8.8"
   val scalaCheckVersion = "1.13.4"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
@@ -50,11 +50,16 @@ wartremoverErrors in (Compile, compile) ++= {
     Wart.MutableDataStructures, // We need them due the application performance requirements.
     Wart.Var, // We need them due the application performance requirements.
     Wart.NonUnitStatements, // Mutable Scala collections APIs always return Unit values.
+    Wart.PublicInference,
     Wart.DefaultArguments,
     Wart.FinalCaseClass
   )
 }
-wartremoverErrors in (Test, test) ++= Warts.allBut(Wart.FinalCaseClass, Wart.NonUnitStatements)
+wartremoverErrors in (Test, test) ++= Warts.allBut(
+  Wart.FinalCaseClass,
+  Wart.NonUnitStatements,
+  Wart.PublicInference
+)
 
 /*************    Scapegoat    **************/
 

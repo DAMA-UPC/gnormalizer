@@ -13,7 +13,7 @@ addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "1.3.4")
 // https://github.com/sbt/sbt-native-packager
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
 // https://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "1.2.1")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.0.2")
 // http://www.scalastyle.org/sbt.html
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 // https://github.com/sksamuel/sbt-scapegoat
