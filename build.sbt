@@ -3,13 +3,13 @@ organization := "edu.upc.dama"
 
 version := "0.0.1"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.2"
 
 /*************   DEPENDENCIES   *************/
 
 libraryDependencies ++= {
-  val fs2Version = "0.9.4"
-  val betterFilesVersion = "2.17.1"
+  val fs2Version = "0.9.5"
+  val betterFilesVersion = "3.0.0"
   Seq(
     // https://github.com/functional-streams-for-scala/fs2
     "co.fs2" %% "fs2-core" % fs2Version,
@@ -22,8 +22,8 @@ libraryDependencies ++= {
 /**********  TEST DEPENDENCIES   ************/
 
 libraryDependencies ++= {
-  val specs2Version = "3.8.8"
-  val scalaCheckVersion = "1.13.4"
+  val specs2Version = "3.8.9"
+  val scalaCheckVersion = "1.13.5"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
