@@ -63,7 +63,7 @@ wartremoverErrors in (Test, test) ++= Warts.allBut(
 
 /*************    Scapegoat    **************/
 
-scapegoatVersion := "1.3.0"
+scapegoatVersion := "1.3.1"
 
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
 (test in Test) := ((test in Test) dependsOn scapegoat).value
