@@ -43,9 +43,5 @@ object Edge {
   /**
     * Implicit ordering for [[Edge]]. Internally calls [[Edge.compareTo()]].
     */
-  implicit val ordering: Ordering[Edge] = {
-    new Ordering[Edge] {
-      def compare(p1: Edge, p2: Edge) = p1 compareTo p2
-    }
-  }
+  implicit val ordering: Ordering[Edge] = (p1: Edge, p2: Edge) => p1.compareTo(p2)
 }
