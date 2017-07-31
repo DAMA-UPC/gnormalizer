@@ -1,7 +1,7 @@
-package parsers
+package gnormalizer.parsers
 
+import babel.core.Edge
 import fs2.{Stream, Task}
-import models.Edge
 import org.specs2.ScalaCheck
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -14,7 +14,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
 
   /**
     * Normalizes a ScalaCheck vertex string to do have any invalid parameter such as,
-    * white spaces within a [[models.Edge]], '\n' characters or commented
+    * white spaces within a [[Edge]], '\n' characters or commented
     * lines.
     */
   private[this] def normalizeScalacheckVertexString(parser: EdgeListParser, vertex: String) = {

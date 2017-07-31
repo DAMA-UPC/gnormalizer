@@ -1,8 +1,7 @@
-package parsers
+package gnormalizer.parsers
 
+import babel.core.{Edge, Vertex}
 import fs2.{Stream, Task}
-import models.Edge
-import models.Vertex._
 
 /**
   * [[Edge]] Parser for 'Edge List' inputs.
@@ -26,7 +25,7 @@ class EdgeListParser extends GraphParser {
   /**
     * Parses an input [[String]] into an [[Edge]].
     *
-    * @param edgeString with each [[Edge]] [[models.Vertex]] separed by a whitespace.
+    * @param edgeString with each [[Edge]] [[Vertex]] separed by a whitespace.
     * @return the parsed [[Edge]].
     */
   @inline
@@ -35,7 +34,7 @@ class EdgeListParser extends GraphParser {
   protected def parseEdge(edgeString: String): Edge = {
     edgeString
       .split(" ") match {
-      case Array(sourceVertex: InputVertex, targetVertex: InputVertex) =>
+      case Array(sourceVertex: Vertex, targetVertex: Vertex) =>
         Edge(source = vertexIndexMapper.vertexMapping(sourceVertex),
              target = vertexIndexMapper.vertexMapping(targetVertex))
       case invalidInput =>

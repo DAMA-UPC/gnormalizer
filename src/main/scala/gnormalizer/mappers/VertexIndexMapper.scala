@@ -1,7 +1,7 @@
-package mappers
+package gnormalizer.mappers
 
-import models.Vertex
-import models.Vertex.{InputVertex, VertexMapping}
+import babel.core.Vertex
+import babel.core.VertexMapping
 
 import scala.collection.immutable.{Stream => MemoryStream}
 import scala.collection.mutable
@@ -14,8 +14,8 @@ import scala.collection.mutable
   */
 final class VertexIndexMapper {
 
-  private[this] val vertexMappingCache: mutable.Map[InputVertex, VertexMapping] = {
-    mutable.HashMap.empty[InputVertex, VertexMapping]
+  private[this] val vertexMappingCache: mutable.Map[Vertex, VertexMapping] = {
+    mutable.HashMap.empty[Vertex, VertexMapping]
   }
 
   private[this] var mappingCacheSize: Long = 0
@@ -26,7 +26,7 @@ final class VertexIndexMapper {
     * @param vertex from the index that will be retrieved.
     * @return [[Vertex]] with the resulting index. (Starting from 0).
     */
-  def vertexMapping(vertex: InputVertex): VertexMapping = {
+  def vertexMapping(vertex: Vertex): VertexMapping = {
     vertexMappingCache.get(vertex) match {
       case Some(index) => index
       case _ =>
@@ -67,6 +67,6 @@ object VertexIndexMapper {
   /**
     * Represents the mapping done to a [[Vertex]].
     */
-  case class Mapping(input: InputVertex, mappedAs: VertexMapping)
+  case class Mapping(input: Vertex, mappedAs: VertexMapping)
 
 }

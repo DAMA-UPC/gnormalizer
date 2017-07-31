@@ -1,9 +1,9 @@
-package parsers
+package gnormalizer.parsers
 
+import babel.core.{Edge, Vertex}
 import fs2.Task
-import mappers.VertexIndexMapper
-import mappers.VertexIndexMapper.Mapping
-import models.Edge
+import gnormalizer.mappers.VertexIndexMapper
+import gnormalizer.mappers.VertexIndexMapper.Mapping
 
 /**
   * Base trait for all [[Edge]] parsers.
@@ -21,10 +21,10 @@ trait GraphParser {
   def toEdgeStream(inputStream: fs2.Stream[Task, String]): fs2.Stream[Task, Edge]
 
   /**
-    * Initializes an [[Stream]] specifying the the [[models.Vertex]] [[Mapping]]s
+    * Initializes an [[Stream]] specifying the the [[Vertex]] [[Mapping]]s
     * from all the elements that have been converted calling [[GraphParser.toEdgeStream]].
     *
-    * @return an [[Stream]] containing all the [[models.Vertex]] mappings.
+    * @return an [[Stream]] containing all the [[Vertex]] mappings.
     */
   def mappingsStream(): Stream[Mapping] = vertexIndexMapper.initMappingStream
 

@@ -1,6 +1,4 @@
-package models
-
-import models.Vertex.VertexMapping
+package babel.core
 
 /**
   * Represents the connection between two [[Vertex]].
@@ -43,5 +41,5 @@ object Edge {
   /**
     * Implicit ordering for [[Edge]]. Internally calls [[Edge.compareTo()]].
     */
-  implicit val ordering: Ordering[Edge] = (p1: Edge, p2: Edge) => p1.compareTo(p2)
+  implicit val edgeOrdering: Ordering[Edge] = (p1: Edge, p2: Edge) => p1.compareTo(p2)
 }

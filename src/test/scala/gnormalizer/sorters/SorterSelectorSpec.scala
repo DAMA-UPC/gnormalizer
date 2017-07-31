@@ -1,4 +1,4 @@
-package sorters
+package gnormalizer.sorters
 
 import org.specs2.mutable.Specification
 

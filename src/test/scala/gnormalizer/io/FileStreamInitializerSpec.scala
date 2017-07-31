@@ -1,4 +1,4 @@
-package io
+package gnormalizer.io
 
 import org.specs2.mutable.Specification
 

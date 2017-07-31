@@ -1,6 +1,6 @@
-package sorters
+package gnormalizer.sorters
 
-import models.Edge
+import babel.core.Edge
 
 /**
   * Base Sorter for all graph sorters.

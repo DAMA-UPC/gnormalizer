@@ -1,10 +1,10 @@
-package sorters
+package gnormalizer.sorters
 
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 
+import babel.core.Edge
 import better.files._
-import models.Edge
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -71,7 +71,7 @@ final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexes
           () =>
             {
               // There some stored edges on the HDD
-              (MutableTreeSet.empty(Edge.ordering) ++ buffer ++ {
+              (MutableTreeSet.empty(Edge.edgeOrdering) ++ buffer ++ {
                 diskBucket.toFile.lines.toSeq
                   .map(_.split(' '))
                   .collect {
@@ -83,7 +83,7 @@ final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexes
         case (buffer, _) =>
           () =>
             // There no stored edges on the HDD
-            (MutableTreeSet.empty(Edge.ordering) ++ buffer).toStream
+            (MutableTreeSet.empty(Edge.edgeOrdering) ++ buffer).toStream
       }
       .foldLeft(Stream[Edge]())((acc, f) => acc #::: f())
   }

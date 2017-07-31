@@ -1,4 +1,4 @@
-package io
+package gnormalizer.io
 
 import fs2.{Task, Stream}
 

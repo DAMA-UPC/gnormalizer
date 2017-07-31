@@ -1,4 +1,4 @@
-package sorters
+package gnormalizer.sorters
 
 /**
   * Object containing methods using for choosing a [[Sorter]] between

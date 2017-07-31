@@ -1,7 +1,7 @@
-package mappers
+package gnormalizer.mappers
 
-import mappers.VertexIndexMapper.Mapping
-import models.Vertex.{InputVertex, VertexMapping}
+import babel.core.{Vertex, VertexMapping}
+import gnormalizer.mappers.VertexIndexMapper.Mapping
 import org.specs2.mutable.Specification
 
 import scala.collection.immutable.HashMap
@@ -45,7 +45,7 @@ class VertexIndexMapperSpec extends Specification {
   val numberVertex: Int = 10
   s"Test a mapper generating $numberVertex elements sequentially" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val testVertex: Seq[InputVertex] = {
+    val testVertex: Seq[Vertex] = {
       (0 until numberVertex).map(i => s"Multiple mapping test String: $i")
     }
     val index: Seq[VertexMapping] = testVertex.map(mapper.vertexMapping)
@@ -76,7 +76,7 @@ class VertexIndexMapperSpec extends Specification {
   val numberEqualParallelVertex: Int = 100000
   s"Manages in parallel' $numberEqualParallelVertex' petitions from same element" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val repeatedElement: InputVertex = "Element to repeat multiple times"
+    val repeatedElement: Vertex = "Element to repeat multiple times"
     val element = {
       (0 until numberEqualParallelVertex).map(_ => mapper.vertexMapping(repeatedElement))
     }
@@ -96,7 +96,7 @@ class VertexIndexMapperSpec extends Specification {
   val numberDifferentParallelVertex: Int = 100000
   s"Maps in parallel '$numberDifferentParallelVertex' elements" should {
     val mapper: VertexIndexMapper = new VertexIndexMapper()
-    val testVertex: Seq[InputVertex] = {
+    val testVertex: Seq[Vertex] = {
       (0 until numberDifferentParallelVertex).map(i => s"Parallel test String $i")
     }
     val insertedIndexes: Seq[VertexMapping] = testVertex.par.map(mapper.vertexMapping).toList

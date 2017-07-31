@@ -1,7 +1,7 @@
-package sorters
+package gnormalizer.sorters
 
+import babel.core.Edge
 import better.files._
-import models.Edge
 
 /**
   * Test for @see [[DiskSorter]]

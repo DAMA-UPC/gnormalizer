@@ -1,8 +1,7 @@
-package models
+package babel.core
 
 import java.security.SecureRandom
 
-import models.Vertex.VertexMapping
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 
