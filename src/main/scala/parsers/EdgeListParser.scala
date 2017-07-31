@@ -36,10 +36,8 @@ class EdgeListParser extends GraphParser {
     edgeString
       .split(" ") match {
       case Array(sourceVertex: InputVertex, targetVertex: InputVertex) =>
-        Edge(
-          source = vertexIndexMapper.vertexMapping(sourceVertex),
-          target = vertexIndexMapper.vertexMapping(targetVertex)
-        )
+        Edge(source = vertexIndexMapper.vertexMapping(sourceVertex),
+             target = vertexIndexMapper.vertexMapping(targetVertex))
       case invalidInput =>
         throw new IllegalArgumentException(
           s"Received ($invalidInput) on EdgeListParser, while the expected format is: 'a b'"

@@ -31,15 +31,13 @@ trait SorterSpec extends Specification {
     * @return a randomized sequence containing all he
     */
   private[this] def generateTestEdges(numberVertex: Int, graphDegree: Int): Seq[Edge] = {
-    Random.shuffle(
-      (0 until numberVertex).
-        map(
-          vertex =>
-            (0 until graphDegree).
-              map(degree => Edge(vertex, degree))
-        )
-        .foldLeft(Seq[Edge]())(_ ++ _)
-    ).toList
+    Random
+      .shuffle(
+        (0 until numberVertex)
+          .map(vertex => (0 until graphDegree).map(degree => Edge(vertex, degree)))
+          .foldLeft(Seq[Edge]())(_ ++ _)
+      )
+      .toList
   }
 
   /**
@@ -63,9 +61,7 @@ trait SorterSpec extends Specification {
       sorter.countNumberEdges() must beEqualTo(unorderedEdgesSeq.size)
     }
     s"The ${unorderedEdgesSeq.size} vertices must be properly sorted" in {
-      sorter.resultStream().equals(
-        unorderedEdgesSeq.sortWith(_.compareTo(_) < 0)
-      )
+      sorter.resultStream().equals(unorderedEdgesSeq.sortWith(_.compareTo(_) < 0))
     }
   }
 
@@ -73,46 +69,39 @@ trait SorterSpec extends Specification {
   @inline private[this] val numParallelVertices: Int = 10000
   @inline private[this] val graphDegreeToTest1: Int = 1
   @inline private[this] val graphDegreeToTest2: Int = 25
-  Seq(graphDegreeToTest1, graphDegreeToTest2).foldLeft(Fragments()) {
-    (fragments, degree) => {
-      fragments.append(
-        s"Inserts and sort graphs with degree: '$degree'" should {
-          // Single bucket expectations
-          "Test if the sorting is done as expected when using a single bucket" should {
-            baseTestFragments(
-              sorter = generateSorter(maxVerticesPerBucket = testBucketSize),
-              parallelInsertion = false,
-              unorderedEdgesSeq = generateTestEdges(testBucketSize, degree),
-              expectedNumberBuckets = 1L
-            )
-          }
-          // Multiple Bucket expectations
-          "Test if the sorting is done as expected when using multiple buckets" should {
-            val bucketSize = 10
-            val numVertex: Int = bucketSize * 5
-            val expectedNumberBuckets = numVertex / bucketSize
-
-            baseTestFragments(
-              sorter = generateSorter(maxVerticesPerBucket = bucketSize),
-              parallelInsertion = false,
-              unorderedEdgesSeq = generateTestEdges(numVertex, degree),
-              expectedNumberBuckets = expectedNumberBuckets
-            )
-          }
-          // Parallel test expectations
-          s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
-            val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
-            val expectedNumberOfBuckets = numParallelVertices / defaultNumberVertexesPerBucket
-
-            baseTestFragments(
-              sorter = generateSorter(maxVerticesPerBucket = defaultNumberVertexesPerBucket),
-              parallelInsertion = true,
-              unorderedEdgesSeq = testEdges,
-              expectedNumberBuckets = expectedNumberOfBuckets
-            )
-          }
+  Seq(graphDegreeToTest1, graphDegreeToTest2).foldLeft(Fragments()) { (fragments, degree) =>
+    {
+      fragments.append(s"Inserts and sort graphs with degree: '$degree'" should {
+        // Single bucket expectations
+        "Test if the sorting is done as expected when using a single bucket" should {
+          baseTestFragments(sorter = generateSorter(maxVerticesPerBucket = testBucketSize),
+                            parallelInsertion = false,
+                            unorderedEdgesSeq = generateTestEdges(testBucketSize, degree),
+                            expectedNumberBuckets = 1L)
         }
-      )
+        // Multiple Bucket expectations
+        "Test if the sorting is done as expected when using multiple buckets" should {
+          val bucketSize = 10
+          val numVertex: Int = bucketSize * 5
+          val expectedNumberBuckets = numVertex / bucketSize
+
+          baseTestFragments(sorter = generateSorter(maxVerticesPerBucket = bucketSize),
+                            parallelInsertion = false,
+                            unorderedEdgesSeq = generateTestEdges(numVertex, degree),
+                            expectedNumberBuckets = expectedNumberBuckets)
+        }
+        // Parallel test expectations
+        s"Test if $numParallelVertices Vertex adjacency's can be done in parallel" should {
+          val testEdges: Seq[Edge] = generateTestEdges(numParallelVertices, degree)
+          val expectedNumberOfBuckets = numParallelVertices / defaultNumberVertexesPerBucket
+
+          baseTestFragments(sorter =
+                              generateSorter(maxVerticesPerBucket = defaultNumberVertexesPerBucket),
+                            parallelInsertion = true,
+                            unorderedEdgesSeq = testEdges,
+                            expectedNumberBuckets = expectedNumberOfBuckets)
+        }
+      })
     }
   }
   val highVertexDegree: Int = numParallelVertices / 2

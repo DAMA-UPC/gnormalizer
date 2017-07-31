@@ -18,9 +18,9 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   *                      The key values corresponds to the [[Edge.source]]
   */
 final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket,
-                            maxEdgesPerBucket: Int = DiskSorter.defaultMaxEdgesPerBucket,
-                            temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix
-                           ) extends Sorter {
+                       maxEdgesPerBucket: Int = DiskSorter.defaultMaxEdgesPerBucket,
+                       temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix)
+    extends Sorter {
 
   private[this] val bufferedEdges = MutableHashMap[Long, mutable.MutableList[Edge]]()
   private[this] val filePaths = MutableHashMap[Long, String]()
@@ -48,17 +48,13 @@ final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexes
               .getOrElseUpdate(bucketId, s"$temporalFileLocation${UUID.randomUUID()}")
               .toFile
               .createIfNotExists(createParents = true)
-              .appendLine(
-                bucket.map(_.toString).mkString("\n")
-              )
+              .appendLine(bucket.map(_.toString).mkString("\n"))
             bucket.clear()
           }
         }
         numberEdges.incrementAndGet()
       case _ =>
-        bufferedEdges.synchronized(
-          bufferedEdges.getOrElseUpdate(bucketId, mutable.MutableList())
-        )
+        bufferedEdges.synchronized(bufferedEdges.getOrElseUpdate(bucketId, mutable.MutableList()))
         addEdgeToResult(edge)
     }
   }
@@ -67,31 +63,29 @@ final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexes
     * @inheritdoc
     */
   override def resultStream(): Stream[Edge] = {
-    bufferedEdges
-      .keys
-      .toList
-      .sorted
+    bufferedEdges.keys.toList.sorted
       .map(key => (bufferedEdges.get(key), filePaths.get(key)))
       .collect { case (Some(key), filePath) => (key, filePath) }
       .collect {
-        case (buffer, Some(diskBucket)) => () => {
-          // There some stored edges on the HDD
-          (MutableTreeSet.empty(Edge.ordering) ++ buffer ++ {
-            diskBucket
-              .toFile
-              .lines
-              .toSeq
-              .map(_.split(' '))
-              .collect {
-                case Array(source, target) =>
-                  Edge(source.toLong, target.toLong)
-              }
-          }).toStream
-        }
-        case (buffer, _) => () =>
-          // There no stored edges on the HDD
-          (MutableTreeSet.empty(Edge.ordering) ++ buffer).toStream
-      }.foldLeft(Stream[Edge]())((acc, f) => acc #::: f())
+        case (buffer, Some(diskBucket)) =>
+          () =>
+            {
+              // There some stored edges on the HDD
+              (MutableTreeSet.empty(Edge.ordering) ++ buffer ++ {
+                diskBucket.toFile.lines.toSeq
+                  .map(_.split(' '))
+                  .collect {
+                    case Array(source, target) =>
+                      Edge(source.toLong, target.toLong)
+                  }
+              }).toStream
+            }
+        case (buffer, _) =>
+          () =>
+            // There no stored edges on the HDD
+            (MutableTreeSet.empty(Edge.ordering) ++ buffer).toStream
+      }
+      .foldLeft(Stream[Edge]())((acc, f) => acc #::: f())
   }
 
   /**

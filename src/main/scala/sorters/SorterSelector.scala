@@ -24,7 +24,7 @@ object SorterSelector {
     * @param fileSizeInBytes from the file that will be sorted by the output [[Sorter]].
     * @return the [[Sorter]] that will be used to sort the input graph.
     */
-  def sorterFromFile(fileSizeInBytes : Long): Sorter = {
+  def sorterFromFile(fileSizeInBytes: Long): Sorter = {
     if (fileSizeInBytes < bytesInGigabyte) {
       new InMemorySorter()
     } else {

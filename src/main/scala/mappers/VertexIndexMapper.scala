@@ -18,7 +18,7 @@ final class VertexIndexMapper {
     mutable.HashMap.empty[InputVertex, VertexMapping]
   }
 
-  private[this] var mappingCacheSize : Long = 0
+  private[this] var mappingCacheSize: Long = 0
 
   /**
     * Returns the cache vertex Index if available. Generates a new one and returns it otherwise.
@@ -56,7 +56,7 @@ final class VertexIndexMapper {
     * Obtains the number of mappings done by the mapper.
     * @return [[Long]] with the number of mappings.
     */
-  def numberMappings : Long = mappingCacheSize
+  def numberMappings: Long = mappingCacheSize
 }
 
 /**

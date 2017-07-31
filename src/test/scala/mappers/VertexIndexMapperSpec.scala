@@ -37,8 +37,8 @@ class VertexIndexMapperSpec extends Specification {
     "Return the same mapping if asking for the same element for a second time" in {
       val repeatedIndex: VertexMapping = mapper.vertexMapping(testVertex)
       (repeatedIndex must beEqualTo(index)) &&
-        (mapper.initMappingStream.size must beEqualTo(1)) &&
-        (mapper.initMappingStream.toList must beEqualTo(List(Mapping(testVertex, 0))))
+      (mapper.initMappingStream.size must beEqualTo(1)) &&
+      (mapper.initMappingStream.toList must beEqualTo(List(Mapping(testVertex, 0))))
     }
   }
 
@@ -56,8 +56,8 @@ class VertexIndexMapperSpec extends Specification {
       index must beEqualTo(0 until numberVertex)
     }
     val mappingExpectation = {
-      (0 until numberVertex).foldLeft(List[Mapping]()) {
-        (acc, i) => {
+      (0 until numberVertex).foldLeft(List[Mapping]()) { (acc, i) =>
+        {
           acc :+ Mapping(testVertex(i), i)
         }
       }
@@ -68,8 +68,8 @@ class VertexIndexMapperSpec extends Specification {
     "Return the same mappings if asking for the same elements for a second time" in {
       val duplicatedIndexes: Seq[VertexMapping] = testVertex.map(mapper.vertexMapping)
       (duplicatedIndexes must beEqualTo(index)) &&
-        (mapper.initMappingStream.size must beEqualTo(numberVertex)) &&
-        (mapper.initMappingStream.toList must beEqualTo(mappingExpectation))
+      (mapper.initMappingStream.size must beEqualTo(numberVertex)) &&
+      (mapper.initMappingStream.toList must beEqualTo(mappingExpectation))
     }
   }
 

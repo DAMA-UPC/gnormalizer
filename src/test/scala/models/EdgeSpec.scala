@@ -43,13 +43,8 @@ class EdgeSpec extends Specification with ScalaCheck {
     "Return the first element appended to the second element separated by a whitespace" >> {
       val numberScalaCheckTries: Int = 200
       val numberWorkers: Int = 4
-      prop(
-        (a: VertexMapping, b: VertexMapping) =>
-          Edge(a, b).toString.equals(s"$a $b")
-      ).set(
-        minTestsOk = numberScalaCheckTries,
-        workers = numberWorkers
-      )
+      prop((a: VertexMapping, b: VertexMapping) => Edge(a, b).toString.equals(s"$a $b"))
+        .set(minTestsOk = numberScalaCheckTries, workers = numberWorkers)
     }
   }
 }

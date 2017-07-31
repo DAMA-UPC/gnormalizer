@@ -35,17 +35,13 @@ final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBuck
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
-        bucket.synchronized(
-          bucket += edge
-        )
+        bucket.synchronized(bucket += edge)
       case _ =>
         inMemoryBuckets.synchronized {
           val bucket = {
-            inMemoryBuckets.
-              getOrElseUpdate(
-                key = bucketId,
-                defaultValue = MutableTreeSet.empty(ordering = Edge.ordering)
-              )
+            inMemoryBuckets.getOrElseUpdate(key = bucketId,
+                                            defaultValue =
+                                              MutableTreeSet.empty(ordering = Edge.ordering))
           }
           bucket.synchronized(bucket += edge)
         }
@@ -57,10 +53,7 @@ final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBuck
     * @inheritdoc
     */
   def resultStream(): Stream[Edge] = {
-    inMemoryBuckets
-      .keys
-      .toList
-      .sorted
+    inMemoryBuckets.keys.toList.sorted
       .map(inMemoryBuckets.get)
       .collect { case Some(key) => key }
       .map(_.toStream)

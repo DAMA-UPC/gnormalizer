@@ -16,8 +16,7 @@ class FileDataSourceHandler extends DataSourceHandler {
     */
   @inline
   override def init(path: String): FileStream[Task, String] = {
-    io
-      .file
+    io.file
       .readAll[Task](Paths.get(path), chunkSize)
       .through(text.utf8Decode)
       .through(text.lines)

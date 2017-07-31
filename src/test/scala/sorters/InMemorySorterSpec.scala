@@ -5,7 +5,7 @@ package sorters
   */
 class InMemorySorterSpec extends SorterSpec {
 
-  override def generateSorter(maxVerticesPerBucket : Int): InMemorySorter = {
+  override def generateSorter(maxVerticesPerBucket: Int): InMemorySorter = {
     new InMemorySorter(maxVerticesPerBucket = maxVerticesPerBucket)
   }
 

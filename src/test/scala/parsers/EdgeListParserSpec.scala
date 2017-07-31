@@ -19,8 +19,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
     */
   private[this] def normalizeScalacheckVertexString(parser: EdgeListParser, vertex: String) = {
     val normalizedTestVertex = {
-      vertex
-        .trim
+      vertex.trim
         .replaceAll(" ", "")
         .replaceAll("\n", "")
         .replaceAll("\r", "")
@@ -63,52 +62,41 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       checkResult(parser, emptyEdgeStream, 0)
     }
     "Must work when inputting with edges in numerical input edges" in {
-      prop(
-        (a: Long, b: Long) => {
-          parser.toEdgeStream(Stream.pure(s"$a $b")).runLog.unsafeRun().size must beEqualTo(1L)
-        }
-      )
+      prop((a: Long, b: Long) => {
+        parser.toEdgeStream(Stream.pure(s"$a $b")).runLog.unsafeRun().size must beEqualTo(1L)
+      })
     }
     "Must work when inputting edges in non-numerical input edges" in {
-      prop(
-        (sourceVertex: String, targetVertex: String) => {
-          // Empty vertices are obviously not supported, so a 'V' prefix has being added.
-          val inputEdge = prepareScalaCheckTest(parser, sourceVertex, targetVertex)
-          val singleEdgeStream = Stream.eval(Task.now(inputEdge))
-          checkResult(parser, singleEdgeStream, 1)
-        }
-      )
+      prop((sourceVertex: String, targetVertex: String) => {
+        // Empty vertices are obviously not supported, so a 'V' prefix has being added.
+        val inputEdge = prepareScalaCheckTest(parser, sourceVertex, targetVertex)
+        val singleEdgeStream = Stream.eval(Task.now(inputEdge))
+        checkResult(parser, singleEdgeStream, 1)
+      })
     }
-    parser.commentedLinesStartCharacters.foldLeft(Fragments()) {
-      (acc, commentStart) =>
-        acc.append(
-          s"It must ignore edges starting with '$commentStart'" in {
-            prop(
-              (inputVertex: String) => {
-                val normalizedInputString = normalizeScalacheckVertexString(parser, inputVertex)
-                val inputEdge = s"$commentStart$normalizedInputString"
-                val singleEdgeStream = Stream.eval(Task.now(inputEdge))
-                checkResult(parser, singleEdgeStream, 0)
-              }
-            )
-          }
-        )
+    parser.commentedLinesStartCharacters.foldLeft(Fragments()) { (acc, commentStart) =>
+      acc.append(s"It must ignore edges starting with '$commentStart'" in {
+        prop((inputVertex: String) => {
+          val normalizedInputString = normalizeScalacheckVertexString(parser, inputVertex)
+          val inputEdge = s"$commentStart$normalizedInputString"
+          val singleEdgeStream = Stream.eval(Task.now(inputEdge))
+          checkResult(parser, singleEdgeStream, 0)
+        })
+      })
     }
     "Must work when inputting two valid Strings divided by several whitespaces" in {
-      prop(
-        (a: String, b: String, numberWhitespaces: Byte) => {
-          val normalizedA = normalizeScalacheckVertexString(parser, a)
-          val normalizedB = normalizeScalacheckVertexString(parser, b)
-          val whitespaces: String = {
-            " " * numberWhitespaces match {
-              case "" | " " => "  "
-              case severalWhitespaces => severalWhitespaces
-            }
+      prop((a: String, b: String, numberWhitespaces: Byte) => {
+        val normalizedA = normalizeScalacheckVertexString(parser, a)
+        val normalizedB = normalizeScalacheckVertexString(parser, b)
+        val whitespaces: String = {
+          " " * numberWhitespaces match {
+            case "" | " " => "  "
+            case severalWhitespaces => severalWhitespaces
           }
-          val inputEdge = s"$normalizedA$whitespaces$normalizedB"
-          checkResult(parser, Stream.eval(Task.now(inputEdge)), 1)
         }
-      )
+        val inputEdge = s"$normalizedA$whitespaces$normalizedB"
+        checkResult(parser, Stream.eval(Task.now(inputEdge)), 1)
+      })
     }
     "When inputting multiple valid inputs, converts all of them to Edges" in {
       val numberOfInputEdges = 1000
@@ -135,34 +123,34 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       emptyParser.mappingsStream() must beEmpty
     }
     "Returns the inserted Vertex mappings successfully when the Stream contains a single value" in {
-      prop(
-        (a: String, b: String) => {
-          // Generates the parser to test
-          val testParser: EdgeListParser = new EdgeListParser()
-          // Generate the test edges
-          val testEdge = prepareScalaCheckTest(testParser, a, b)
-          // Generates the parser input
-          val input: Stream[Task, String] = Stream.eval(Task.now(testEdge))
-          // Expectation
-          testParser.toEdgeStream(input).run.unsafeRun()
-          testParser.mappingsStream().size must beEqualTo(2)
-        }
-      )
+      prop((a: String, b: String) => {
+        // Generates the parser to test
+        val testParser: EdgeListParser = new EdgeListParser()
+        // Generate the test edges
+        val testEdge = prepareScalaCheckTest(testParser, a, b)
+        // Generates the parser input
+        val input: Stream[Task, String] = Stream.eval(Task.now(testEdge))
+        // Expectation
+        testParser.toEdgeStream(input).run.unsafeRun()
+        testParser.mappingsStream().size must beEqualTo(2)
+      })
     }
     "Returns the inserted Vertex mappings when the Stream contains multiple values" in {
       // Generates the parser to test
       val parser: EdgeListParser = new EdgeListParser()
       // Input edges
-      val firstEdge : String = s"TestEdgeSource TestEdgeTarget"
+      val firstEdge: String = s"TestEdgeSource TestEdgeTarget"
       val edges: Seq[String] = (1 until 1000).map(_.toString).map(index => s"$index ${index}A")
       // Parses the edges in the stream
-      parser.toEdgeStream(
-        edges.foldLeft(Stream.eval[Task, String](Task.now(firstEdge))) {
-          (acc, edgeString) => acc ++ Stream.eval(Task.now(edgeString))
-        }
-      ).run.unsafeRun()
+      parser
+        .toEdgeStream(edges.foldLeft(Stream.eval[Task, String](Task.now(firstEdge))) {
+          (acc, edgeString) =>
+            acc ++ Stream.eval(Task.now(edgeString))
+        })
+        .run
+        .unsafeRun()
       // Number of edges * 2 (Source target)
-      val expectedNumberEdges : Int = 2 * edges.size + 2
+      val expectedNumberEdges: Int = 2 * edges.size + 2
       // Expectation
       parser.mappingsStream().size must beEqualTo(expectedNumberEdges)
     }

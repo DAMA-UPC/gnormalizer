@@ -26,6 +26,6 @@ trait GraphParser {
     *
     * @return an [[Stream]] containing all the [[models.Vertex]] mappings.
     */
-  def mappingsStream() : Stream[Mapping] = vertexIndexMapper.initMappingStream
+  def mappingsStream(): Stream[Mapping] = vertexIndexMapper.initMappingStream
 
 }

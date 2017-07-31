@@ -3,7 +3,7 @@ organization := "edu.upc.dama"
 
 version := "0.0.1"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 
 /*************   DEPENDENCIES   *************/
 
@@ -22,7 +22,7 @@ libraryDependencies ++= {
 /**********  TEST DEPENDENCIES   ************/
 
 libraryDependencies ++= {
-  val specs2Version = "3.9.2"
+  val specs2Version = "3.9.4"
   val scalaCheckVersion = "1.13.5"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
@@ -60,18 +60,3 @@ wartremoverErrors in (Test, test) ++= Warts.allBut(
   Wart.NonUnitStatements,
   Wart.PublicInference
 )
-
-/*************    Scapegoat    **************/
-
-scapegoatVersion := "1.3.1"
-
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoat
-(test in Test) := ((test in Test) dependsOn scapegoat).value
-
-/************    ScalaStyle    **************/
-
-scalastyleFailOnError := true
-
-lazy val testScalastyle = taskKey[Unit]("testScalastyle")
-testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Test).toTask("").value
-(test in Test) := ((test in Test) dependsOn testScalastyle).value
