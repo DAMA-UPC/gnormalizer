@@ -1,6 +1,6 @@
 package gnormalizer.mappers
 
-import babel.core.{Vertex, VertexMapping}
+import babel.graph.{Vertex, VertexMapping}
 import gnormalizer.mappers.VertexIndexMapper.Mapping
 import org.specs2.mutable.Specification
 

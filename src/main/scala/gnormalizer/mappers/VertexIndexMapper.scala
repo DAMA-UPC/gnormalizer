@@ -1,7 +1,7 @@
 package gnormalizer.mappers
 
-import babel.core.Vertex
-import babel.core.VertexMapping
+import babel.graph.Vertex
+import babel.graph.VertexMapping
 
 import scala.collection.immutable.{Stream => MemoryStream}
 import scala.collection.mutable

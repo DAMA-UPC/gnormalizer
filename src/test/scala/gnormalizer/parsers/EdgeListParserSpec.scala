@@ -1,6 +1,6 @@
 package gnormalizer.parsers
 
-import babel.core.Edge
+import babel.graph.Edge
 import fs2.{Stream, Task}
 import org.specs2.ScalaCheck
 import org.specs2.matcher.MatchResult

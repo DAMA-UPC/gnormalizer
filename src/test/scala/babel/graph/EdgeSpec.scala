@@ -1,4 +1,4 @@
-package babel.core
+package babel.graph
 
 import java.security.SecureRandom
 

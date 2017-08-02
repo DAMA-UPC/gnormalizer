@@ -1,6 +1,6 @@
 package gnormalizer.parsers
 
-import babel.core.{Edge, Vertex}
+import babel.graph.{Edge, Vertex}
 import fs2.Task
 import gnormalizer.mappers.VertexIndexMapper
 import gnormalizer.mappers.VertexIndexMapper.Mapping

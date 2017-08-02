@@ -1,6 +1,7 @@
 package gnormalizer.parsers
 
-import babel.core.{Edge, Vertex}
+import babel.graph.Vertex
+import babel.graph.Edge
 import fs2.{Stream, Task}
 
 /**

@@ -2,9 +2,8 @@ package gnormalizer.sorters
 
 import java.util.concurrent.atomic.AtomicLong
 
-import babel.core.{Edge, Vertex}
+import babel.graph.{Edge, Vertex}
 import gnormalizer.sorters.InMemorySorter.defaultMaxVertexesPerBucket
-import babel.core.Edge
 
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 

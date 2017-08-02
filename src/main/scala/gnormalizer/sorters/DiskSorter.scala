@@ -3,7 +3,7 @@ package gnormalizer.sorters
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 
-import babel.core.Edge
+import babel.graph.Edge
 import better.files._
 
 import scala.annotation.tailrec

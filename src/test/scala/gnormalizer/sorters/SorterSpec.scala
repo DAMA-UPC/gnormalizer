@@ -1,6 +1,6 @@
 package gnormalizer.sorters
 
-import babel.core.{Vertex, Edge}
+import babel.graph.{Vertex, Edge}
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.{Fragment, Fragments}
 

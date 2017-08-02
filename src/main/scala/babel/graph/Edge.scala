@@ -1,7 +1,7 @@
-package babel.core
+package babel.graph
 
 /**
-  * Represents the connection between two [[Vertex]].
+  * Represents the connection between two [[VertexAliases]].
   */
 case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
 
@@ -34,9 +34,11 @@ case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable
 }
 
 /**
-  * Companion object for [[Edge]]
+  * Companion object for [[Edge]].
   */
-object Edge {
+object Edge extends EdgeOrdering
+
+trait EdgeOrdering {
 
   /**
     * Implicit ordering for [[Edge]]. Internally calls [[Edge.compareTo()]].
