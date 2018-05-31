@@ -1,7 +1,8 @@
 package gnormalizer.parsers
 
 import babel.graph.Edge
-import fs2.{Stream, Task}
+import cats.effect.IO
+import fs2.Stream
 import org.specs2.ScalaCheck
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -50,27 +51,27 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
     * Checks if the parser result is valid or not.
     */
   private[this] def checkResult(parser: EdgeListParser,
-                                input: Stream[Task, String],
+                                input: Stream[IO, String],
                                 numberOfEdges: Int): MatchResult[_] = {
-    parser.toEdgeStream(input).runLog.unsafeRun().size must beEqualTo(numberOfEdges)
+    parser.toEdgeStream(input).compile.toList.unsafeRunSync().size must beEqualTo(numberOfEdges)
   }
 
   "toStream() method" should {
     val parser: EdgeListParser = new EdgeListParser()
     "Must work when inputting a Stream with no elements" in {
-      val emptyEdgeStream = Stream.eval(Task.now(""))
+      val emptyEdgeStream = Stream.eval(IO.pure(""))
       checkResult(parser, emptyEdgeStream, 0)
     }
     "Must work when inputting with edges in numerical input edges" in {
       prop((a: Long, b: Long) => {
-        parser.toEdgeStream(Stream.pure(s"$a $b")).runLog.unsafeRun().size must beEqualTo(1L)
+        parser.toEdgeStream(Stream.apply(s"$a $b")).compile.toList.unsafeRunSync().size must beEqualTo(1L)
       })
     }
     "Must work when inputting edges in non-numerical input edges" in {
       prop((sourceVertex: String, targetVertex: String) => {
         // Empty vertices are obviously not supported, so a 'V' prefix has being added.
         val inputEdge = prepareScalaCheckTest(parser, sourceVertex, targetVertex)
-        val singleEdgeStream = Stream.eval(Task.now(inputEdge))
+        val singleEdgeStream = Stream.eval(IO.pure(inputEdge))
         checkResult(parser, singleEdgeStream, 1)
       })
     }
@@ -79,7 +80,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
         prop((inputVertex: String) => {
           val normalizedInputString = normalizeScalacheckVertexString(parser, inputVertex)
           val inputEdge = s"$commentStart$normalizedInputString"
-          val singleEdgeStream = Stream.eval(Task.now(inputEdge))
+          val singleEdgeStream = Stream.eval(IO.pure(inputEdge))
           checkResult(parser, singleEdgeStream, 0)
         })
       })
@@ -95,25 +96,25 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
           }
         }
         val inputEdge = s"$normalizedA$whitespaces$normalizedB"
-        checkResult(parser, Stream.eval(Task.now(inputEdge)), 1)
+        checkResult(parser, Stream.eval(IO.pure(inputEdge)), 1)
       })
     }
     "When inputting multiple valid inputs, converts all of them to Edges" in {
       val numberOfInputEdges = 1000
 
-      val expectation: Stream[Task, String] = {
+      val expectation: Stream[IO, String] = {
         (0 until numberOfInputEdges)
           .map(i => s"$i $i")
-          .map(a => Stream.eval(Task.now(a)))
-          .foldLeft(Stream[Task, String]())(_ ++ _)
+          .map(a => Stream.eval(IO.pure(a)))
+          .reduceLeft(_ ++ _)
       }
       checkResult(parser, expectation, numberOfInputEdges)
     }
     "When inputting an invalid value, return a failed Stream" in {
       val invalidInputString: String = "a b c" // 3 vertices
-      val invalidInput: Stream[Task, String] = Stream.eval(Task.now(invalidInputString))
-      val stream: Stream[Task, Edge] = parser.toEdgeStream(invalidInput)
-      stream.run.unsafeRun() must throwA[IllegalArgumentException]
+      val invalidInput: Stream[IO, String] = Stream.eval(IO.pure(invalidInputString))
+      val stream: Stream[IO, Edge] = parser.toEdgeStream(invalidInput)
+      stream.compile.drain.unsafeRunSync() must throwA[IllegalArgumentException]
     }
   }
 
@@ -129,9 +130,9 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
         // Generate the test edges
         val testEdge = prepareScalaCheckTest(testParser, a, b)
         // Generates the parser input
-        val input: Stream[Task, String] = Stream.eval(Task.now(testEdge))
+        val input: Stream[IO, String] = Stream.eval(IO.pure(testEdge))
         // Expectation
-        testParser.toEdgeStream(input).run.unsafeRun()
+        testParser.toEdgeStream(input).compile.drain.unsafeRunSync()
         testParser.mappingsStream().size must beEqualTo(2)
       })
     }
@@ -143,12 +144,14 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       val edges: Seq[String] = (1 until 1000).map(_.toString).map(index => s"$index ${index}A")
       // Parses the edges in the stream
       parser
-        .toEdgeStream(edges.foldLeft(Stream.eval[Task, String](Task.now(firstEdge))) {
+        .toEdgeStream(edges.foldLeft(Stream.eval[IO, String](IO.pure(firstEdge))) {
           (acc, edgeString) =>
-            acc ++ Stream.eval(Task.now(edgeString))
+            acc ++ Stream.eval(IO.pure(edgeString))
         })
-        .run
-        .unsafeRun()
+        .compile
+        .drain
+        .unsafeRunSync()
+
       // Number of edges * 2 (Source target)
       val expectedNumberEdges: Int = 2 * edges.size + 2
       // Expectation

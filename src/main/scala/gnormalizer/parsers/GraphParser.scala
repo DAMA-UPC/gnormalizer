@@ -1,7 +1,7 @@
 package gnormalizer.parsers
 
 import babel.graph.{Edge, Vertex}
-import fs2.Task
+import cats.effect.IO
 import gnormalizer.mappers.VertexIndexMapper
 import gnormalizer.mappers.VertexIndexMapper.Mapping
 
@@ -18,7 +18,7 @@ trait GraphParser {
     * @param inputStream which content is going to be transformed.
     * @return a [[Stream]] of [[Edge]]s.
     */
-  def toEdgeStream(inputStream: fs2.Stream[Task, String]): fs2.Stream[Task, Edge]
+  def toEdgeStream(inputStream: fs2.Stream[IO, String]): fs2.Stream[IO, Edge]
 
   /**
     * Initializes an [[Stream]] specifying the the [[Vertex]] [[Mapping]]s

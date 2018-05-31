@@ -2,7 +2,8 @@ package gnormalizer.parsers
 
 import babel.graph.Vertex
 import babel.graph.Edge
-import fs2.{Stream, Task}
+import cats.effect.IO
+import fs2.Stream
 
 /**
   * [[Edge]] Parser for 'Edge List' inputs.
@@ -14,7 +15,7 @@ class EdgeListParser extends GraphParser {
   /**
     * @inheritdoc
     */
-  override def toEdgeStream(inputStream: Stream[Task, String]): Stream[Task, Edge] = {
+  override def toEdgeStream(inputStream: Stream[IO, String]): Stream[IO, Edge] = {
     inputStream
       .map(_.trim) // Removes the leading and the trailing spaces
       .map(_.replaceAll("\\s+", " ")) // Converts consecutive whitespaces into a single one

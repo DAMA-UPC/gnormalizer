@@ -8,7 +8,7 @@ import org.specs2.mutable.Specification
 class FileStreamInitializerSpec extends Specification {
 
   def initLoggedFileStream(filePath: String): Vector[String] =
-    new FileDataSourceHandler().init(filePath).runLog.unsafeRun()
+    new FileDataSourceHandler().init(filePath).compile.toList.unsafeRunSync().toVector
 
   "initializeFileStream() method" should {
     val oneElementEdgeFilePath = "src/test/resources/edge_list/test_edge_list_one_element"

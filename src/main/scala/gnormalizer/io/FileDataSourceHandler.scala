@@ -1,8 +1,10 @@
 package gnormalizer.io
 
+import cats.effect.IO
+
 import java.nio.file.Paths
 
-import fs2.{Task, io, text, Stream => FileStream}
+import fs2.{io, text, Stream => FileStream}
 
 /**
   * Object containing a set of methods used for managing file [[DataSourceHandler]].
@@ -13,9 +15,9 @@ class FileDataSourceHandler extends DataSourceHandler {
     * @inheritdoc
     */
   @inline
-  override def init(path: String): FileStream[Task, String] = {
+  override def init(path: String): FileStream[IO, String] = {
     io.file
-      .readAll[Task](Paths.get(path), FileDataSourceHandler.chunkSize)
+      .readAll[IO](Paths.get(path), FileDataSourceHandler.chunkSize)
       .through(text.utf8Decode)
       .through(text.lines)
   }

@@ -1,15 +1,15 @@
 name := "gnormalizer"
 organization := "edu.upc.dama"
 
-version := "0.0.1"
+version := "0.1.0"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 
 /*************   DEPENDENCIES   *************/
 
 libraryDependencies ++= {
-  val fs2Version = "0.9.7"
-  val betterFilesVersion = "3.0.0"
+  val fs2Version = "0.10.4"
+  val betterFilesVersion = "3.5.0"
   Seq(
     // https://github.com/functional-streams-for-scala/fs2
     "co.fs2" %% "fs2-core" % fs2Version,
@@ -22,8 +22,8 @@ libraryDependencies ++= {
 /**********  TEST DEPENDENCIES   ************/
 
 libraryDependencies ++= {
-  val specs2Version = "3.9.4"
-  val scalaCheckVersion = "1.13.5"
+  val specs2Version = "4.2.0"
+  val scalaCheckVersion = "1.14.0"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
