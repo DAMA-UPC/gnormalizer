@@ -64,7 +64,11 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
     }
     "Must work when inputting with edges in numerical input edges" in {
       prop((a: Long, b: Long) => {
-        parser.toEdgeStream(Stream.apply(s"$a $b")).compile.toList.unsafeRunSync().size must beEqualTo(1L)
+        parser
+          .toEdgeStream(Stream.apply(s"$a $b"))
+          .compile
+          .toList
+          .unsafeRunSync().size must beEqualTo(1L)
       })
     }
     "Must work when inputting edges in non-numerical input edges" in {
@@ -123,7 +127,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       val emptyParser: EdgeListParser = new EdgeListParser()
       emptyParser.mappingsStream() must beEmpty
     }
-    "Returns the inserted Vertex mappings successfully when the Stream contains a single value" in {
+    "Returns the inserted Vertex mappings successfully on a single value Stream" in {
       prop((a: String, b: String) => {
         // Generates the parser to test
         val testParser: EdgeListParser = new EdgeListParser()
