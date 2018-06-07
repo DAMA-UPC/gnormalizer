@@ -1,3 +1,2 @@
-real_world_test_graphs/edge_list/big_2_gb_graph.txt filter=lfs diff=lfs merge=lfs -text
 real_world_test_graphs/edge_list/small_5_mb_graph.txt filter=lfs diff=lfs merge=lfs -text
 real_world_test_graphs/edge_list/medium_281_mb_graph.txt filter=lfs diff=lfs merge=lfs -text
