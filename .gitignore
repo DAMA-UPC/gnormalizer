@@ -278,3 +278,6 @@ GitHub.sublime-settings
 
 # Project output
 output/
+
+# Intelij
+gnormalizer.iml

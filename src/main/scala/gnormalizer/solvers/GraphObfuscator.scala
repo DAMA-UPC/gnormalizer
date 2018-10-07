@@ -19,6 +19,7 @@ object GraphObfuscator {
     * @param path       containing the path to the graph being obfuscated.
     * @param startDeserializationAtLine containing the line number where parsing starts.
     */
+  @SuppressWarnings(Array("org.wartremover.warts.Nothing", "org.wartremover.warts.Any"))
   def obfuscateEdgeListGraph(path: String,
                              startDeserializationAtLine: Long = 0L): IO[Stream[Edge]] = {
 
