@@ -16,5 +16,6 @@ trait DataSourceHandler {
     */
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
-  def init(path: String)(implicit ec: ExecutionContext, cs: ContextShift[IO]) : fs2.Stream[cats.effect.IO, String]
+  def init(path: String)(implicit ec: ExecutionContext,
+                         cs: ContextShift[IO]): fs2.Stream[cats.effect.IO, String]
 }

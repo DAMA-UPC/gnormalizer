@@ -1,6 +1,6 @@
 package gnormalizer.parsers
 
-import babel.graph.Vertex
+import babel.graph.Node
 import babel.graph.Edge
 import cats.effect.IO
 import fs2.Stream
@@ -10,7 +10,7 @@ import fs2.Stream
   */
 class EdgeListParser extends GraphParser {
 
-  val commentedLinesStartCharacters: Seq[String] = Seq("#", "//")
+  private[parsers] val commentedLinesStartCharacters: Seq[String] = Seq("#", "//")
 
   /**
     * @inheritdoc
@@ -27,7 +27,7 @@ class EdgeListParser extends GraphParser {
   /**
     * Parses an input [[String]] into an [[Edge]].
     *
-    * @param edgeString with each [[Edge]] [[Vertex]] separed by a whitespace.
+    * @param edgeString with each [[Edge]] [[Node]] separed by a whitespace.
     * @return the parsed [[Edge]].
     */
   @inline
@@ -36,9 +36,9 @@ class EdgeListParser extends GraphParser {
   protected def parseEdge(edgeString: String): Edge = {
     edgeString
       .split(" ") match {
-      case Array(sourceVertex: Vertex, targetVertex: Vertex) =>
-        Edge(source = vertexIndexMapper.vertexMapping(sourceVertex),
-             target = vertexIndexMapper.vertexMapping(targetVertex))
+      case Array(sourceNode: Node, targetNode: Node) =>
+        Edge(source = nodeIndexMapper.nodeMapping(sourceNode),
+             target = nodeIndexMapper.nodeMapping(targetNode))
       case invalidInput =>
         throw new IllegalArgumentException(
           s"Received ($invalidInput) on EdgeListParser, while the expected format is: 'a b'"

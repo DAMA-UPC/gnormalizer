@@ -14,13 +14,13 @@ import org.specs2.specification.core.Fragments
 class EdgeListParserSpec extends Specification with ScalaCheck {
 
   /**
-    * Normalizes a ScalaCheck vertex string to do have any invalid parameter such as,
+    * Normalizes a ScalaCheck node string to do have any invalid parameter such as,
     * white spaces within a [[Edge]], '\n' characters or commented
     * lines.
     */
-  private[this] def normalizeScalacheckVertexString(parser: EdgeListParser, vertex: String) = {
-    val normalizedTestVertex = {
-      vertex.trim
+  private[this] def normalizeScalacheckNodeString(parser: EdgeListParser, node: String) = {
+    val normalizedTestNode = {
+      node.trim
         .replaceAll(" ", "")
         .replaceAll("\n", "")
         .replaceAll("\r", "")
@@ -28,18 +28,18 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
         .replaceAll("\u000c", "")
         .replaceAll("\u0009", "")
     }
-    normalizedTestVertex match {
-      case "" => "TestVertex"
-      case _ if parser.commentedLinesStartCharacters.exists(normalizedTestVertex.startsWith) =>
-        s"V$normalizedTestVertex"
-      case _ => normalizedTestVertex
+    normalizedTestNode match {
+      case "" => "TestNode"
+      case _ if parser.commentedLinesStartCharacters.exists(normalizedTestNode.startsWith) =>
+        s"V$normalizedTestNode"
+      case _ => normalizedTestNode
     }
   }
 
   private[this] def prepareScalaCheckTest(parser: EdgeListParser, a: String, b: String): String = {
-    val normalizedA = normalizeScalacheckVertexString(parser, a)
-    val normalizedB = normalizeScalacheckVertexString(parser, b)
-    // In this test Vertex 'A' and 'B' cannot be equal
+    val normalizedA = normalizeScalacheckNodeString(parser, a)
+    val normalizedB = normalizeScalacheckNodeString(parser, b)
+    // In this test Node 'A' and 'B' cannot be equal
     if (normalizedA.equals(normalizedB)) {
       s"$normalizedA ${normalizedB}2"
     } else {
@@ -68,21 +68,22 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
           .toEdgeStream(Stream.apply(s"$a $b"))
           .compile
           .toList
-          .unsafeRunSync().size must beEqualTo(1L)
+          .unsafeRunSync()
+          .size must beEqualTo(1L)
       })
     }
     "Must work when inputting edges in non-numerical input edges" in {
-      prop((sourceVertex: String, targetVertex: String) => {
-        // Empty vertices are obviously not supported, so a 'V' prefix has being added.
-        val inputEdge = prepareScalaCheckTest(parser, sourceVertex, targetVertex)
+      prop((sourceNode: String, targetNode: String) => {
+        // Empty nodes are obviously not supported, so a 'V' prefix has being added.
+        val inputEdge = prepareScalaCheckTest(parser, sourceNode, targetNode)
         val singleEdgeStream = Stream.eval(IO.pure(inputEdge))
         checkResult(parser, singleEdgeStream, 1)
       })
     }
     parser.commentedLinesStartCharacters.foldLeft(Fragments()) { (acc, commentStart) =>
       acc.append(s"It must ignore edges starting with '$commentStart'" in {
-        prop((inputVertex: String) => {
-          val normalizedInputString = normalizeScalacheckVertexString(parser, inputVertex)
+        prop((inputNodes: String) => {
+          val normalizedInputString = normalizeScalacheckNodeString(parser, inputNodes)
           val inputEdge = s"$commentStart$normalizedInputString"
           val singleEdgeStream = Stream.eval(IO.pure(inputEdge))
           checkResult(parser, singleEdgeStream, 0)
@@ -91,8 +92,8 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
     }
     "Must work when inputting two valid Strings divided by several whitespaces" in {
       prop((a: String, b: String, numberWhitespaces: Byte) => {
-        val normalizedA = normalizeScalacheckVertexString(parser, a)
-        val normalizedB = normalizeScalacheckVertexString(parser, b)
+        val normalizedA = normalizeScalacheckNodeString(parser, a)
+        val normalizedB = normalizeScalacheckNodeString(parser, b)
         val whitespaces: String = {
           " " * numberWhitespaces match {
             case "" | " " => "  "
@@ -115,7 +116,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       checkResult(parser, expectation, numberOfInputEdges)
     }
     "When inputting an invalid value, return a failed Stream" in {
-      val invalidInputString: String = "a b c" // 3 vertices
+      val invalidInputString: String = "a b c" // 3 nodes
       val invalidInput: Stream[IO, String] = Stream.eval(IO.pure(invalidInputString))
       val stream: Stream[IO, Edge] = parser.toEdgeStream(invalidInput)
       stream.compile.drain.unsafeRunSync() must throwA[IllegalArgumentException]
@@ -127,7 +128,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
       val emptyParser: EdgeListParser = new EdgeListParser()
       emptyParser.mappingsStream() must beEmpty
     }
-    "Returns the inserted Vertex mappings successfully on a single value Stream" in {
+    "Returns the inserted Node mappings successfully on a single value Stream" in {
       prop((a: String, b: String) => {
         // Generates the parser to test
         val testParser: EdgeListParser = new EdgeListParser()
@@ -140,7 +141,7 @@ class EdgeListParserSpec extends Specification with ScalaCheck {
         testParser.mappingsStream().size must beEqualTo(2)
       })
     }
-    "Returns the inserted Vertex mappings when the Stream contains multiple values" in {
+    "Returns the inserted Node mappings when the Stream contains multiple values" in {
       // Generates the parser to test
       val parser: EdgeListParser = new EdgeListParser()
       // Input edges

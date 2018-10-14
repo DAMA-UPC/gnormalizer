@@ -1,9 +1,9 @@
 package babel.graph
 
 /**
-  * Represents the connection between two [[VertexAliases]].
+  * Represents the connection between two [[NodeAliases]].
   */
-case class Edge(source: VertexMapping, target: VertexMapping) extends Comparable[Edge] {
+case class Edge(source: NodeMapping, target: NodeMapping) extends Comparable[Edge] {
 
   /**
     * Overloads the default [[compareTo()]] method. During ordering the [[Edge]]

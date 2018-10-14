@@ -11,17 +11,17 @@ import org.specs2.mutable.Specification
 class EdgeSpec extends Specification with ScalaCheck {
 
   "compareTo method" should {
-    def any: VertexMapping = new SecureRandom().nextInt()
+    def any: NodeMapping = new SecureRandom().nextInt()
     "Return '0' when two edges are equal" in {
       val sourceAndTargetEdge = Edge(source = any, target = any)
       sourceAndTargetEdge.compareTo(sourceAndTargetEdge) must beEqualTo(0)
     }
-    "Return a positive number when the input edge has a lower source Vertex" in {
+    "Return a positive number when the input edge has a lower source Node" in {
       val sourceEdge: Edge = Edge(source = 2, target = any)
       val targetEdge: Edge = Edge(source = 1, target = any)
       sourceEdge.compareTo(targetEdge) must beGreaterThan(0)
     }
-    "Return a negative number when the input edge has a greater source Vertex" in {
+    "Return a negative number when the input edge has a greater source Node" in {
       val sourceEdge: Edge = Edge(source = 1, target = any)
       val targetEdge: Edge = Edge(source = 2, target = any)
       sourceEdge.compareTo(targetEdge) must beLessThan(0)
@@ -42,7 +42,7 @@ class EdgeSpec extends Specification with ScalaCheck {
     "Return the first element appended to the second element separated by a whitespace" >> {
       val numberScalaCheckTries: Int = 200
       val numberWorkers: Int = 4
-      prop((a: VertexMapping, b: VertexMapping) => Edge(a, b).toString.equals(s"$a $b"))
+      prop((a: NodeMapping, b: NodeMapping) => Edge(a, b).toString.equals(s"$a $b"))
         .set(minTestsOk = numberScalaCheckTries, workers = numberWorkers)
     }
   }

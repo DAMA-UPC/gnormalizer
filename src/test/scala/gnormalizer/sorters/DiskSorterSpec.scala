@@ -11,10 +11,10 @@ import better.files._
 class DiskSorterSpec extends SorterSpec {
 
   override def generateSorter(maxVerticesPerBucket: Int): Sorter = {
-    new DiskSorter(maxVerticesPerBucket = maxVerticesPerBucket)
+    new DiskSorter(maxNodesPerBucket = maxVerticesPerBucket)
   }
 
-  override def defaultNumberVertexesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket
+  override def defaultNumberNodesPerBucket: Int = DiskSorter.defaultMaxNodesPerBucket
 
   "appendEdgeToFile() method" in {
     val edges: Seq[Edge] = (0 to 1).map(i => Edge(i, i))
@@ -26,7 +26,7 @@ class DiskSorterSpec extends SorterSpec {
     }
 
     "Stores in disk the inserted edges, if the maximum edge size is exceeded" in {
-      val multipleBucketsSorter = new DiskSorter(maxVerticesPerBucket = 1, maxEdgesPerBucket = 0)
+      val multipleBucketsSorter = new DiskSorter(maxNodesPerBucket = 1, maxEdgesPerBucket = 0)
       edges.foreach(multipleBucketsSorter.addEdgeToResult)
       // Assert 1: There must be two generated files.
       (multipleBucketsSorter.usedFilePaths().size must beEqualTo(edges.size)) &&

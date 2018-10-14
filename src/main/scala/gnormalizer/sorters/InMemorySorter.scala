@@ -2,8 +2,8 @@ package gnormalizer.sorters
 
 import java.util.concurrent.atomic.AtomicLong
 
-import babel.graph.{Edge, Vertex}
-import gnormalizer.sorters.InMemorySorter.defaultMaxVertexesPerBucket
+import babel.graph.{Edge, Node}
+import gnormalizer.sorters.InMemorySorter.defaultMaxNodesPerBucket
 
 import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTreeSet}
 
@@ -11,10 +11,10 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * Orders all the input [[Edge]] forcing not to use the
   * disk in the process, using the RAM memory instead.
   *
-  * @param maxVerticesPerBucket the maximum amount of [[Vertex]]
+  * @param maxNodesPErBucket the maximum amount of [[Node]]
   *                             which adjacency's will be sorted in each internal bucket.
   */
-final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBucket) extends Sorter {
+final class InMemorySorter(maxNodesPErBucket: Int = defaultMaxNodesPerBucket) extends Sorter {
 
   /**
     * In-memory buffered [[Edge]]s.
@@ -30,7 +30,7 @@ final class InMemorySorter(maxVerticesPerBucket: Int = defaultMaxVertexesPerBuck
     * @inheritdoc
     */
   override def addEdgeToResult(edge: Edge): Long = {
-    val bucketId: Long = edge.source / maxVerticesPerBucket
+    val bucketId: Long = edge.source / maxNodesPErBucket
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
@@ -80,5 +80,5 @@ object InMemorySorter {
     * The default amount of [[Edge]] which [[Edge.source]] node
     * are placed in a node Bucket at maximum.
     */
-  @inline val defaultMaxVertexesPerBucket: Int = 250
+  @inline val defaultMaxNodesPerBucket: Int = 250
 }

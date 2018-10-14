@@ -14,10 +14,10 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * Orders all the input [[Edge]] forcing not to use the disk in the process,
   * forcing the memory usage during all the process.
   *
-  * @param maxVerticesPerBucket the maximum amount of key values in each bucket.
+  * @param maxNodesPerBucket the maximum amount of key values in each bucket.
   *                      The key values corresponds to the [[Edge.source]]
   */
-final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexesPerBucket,
+final class DiskSorter(maxNodesPerBucket: Int = DiskSorter.defaultMaxNodesPerBucket,
                        maxEdgesPerBucket: Int = DiskSorter.defaultMaxEdgesPerBucket,
                        temporalFileLocation: String = DiskSorter.defaultTemporalFilePathPrefix)
     extends Sorter {
@@ -36,7 +36,7 @@ final class DiskSorter(maxVerticesPerBucket: Int = DiskSorter.defaultMaxVertexes
   @tailrec
   override def addEdgeToResult(edge: Edge): Long = {
 
-    val bucketId: Long = edge.source / maxVerticesPerBucket
+    val bucketId: Long = edge.source / maxNodesPerBucket
 
     bufferedEdges.get(bucketId) match {
       case Some(bucket) =>
@@ -118,7 +118,7 @@ object DiskSorter {
     * Sets the maximum amount of different [[Edge.source]]
     * that can fit in each internal [[DiskSorter]] bucket.
     */
-  @inline val defaultMaxVertexesPerBucket: Int = 1000
+  @inline val defaultMaxNodesPerBucket: Int = 1000
 
   /**
     * Default max number of [[Edge]]s per buffered bucket before
