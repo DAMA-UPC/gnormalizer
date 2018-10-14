@@ -22,7 +22,7 @@ libraryDependencies ++= {
 /**********  TEST DEPENDENCIES   ************/
 
 libraryDependencies ++= {
-  val specs2Version = "4.3.4"
+  val specs2Version = "4.3.5"
   val scalaCheckVersion = "1.14.0"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
