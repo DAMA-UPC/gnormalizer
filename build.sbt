@@ -1,7 +1,7 @@
 name := "gnormalizer"
 organization := "edu.upc.dama"
 
-version := "0.4.0"
+version := "0.5.0-SNAPSHOT"
 
 scalaVersion := "2.12.7"
 
