@@ -1,7 +1,6 @@
 package gnormalizer.parsers
 
-import babel.graph.Node
-import babel.graph.Edge
+import babel.graph.{Edge, Node}
 import cats.effect.IO
 import fs2.Stream
 
