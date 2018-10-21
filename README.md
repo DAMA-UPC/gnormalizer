@@ -2,12 +2,29 @@
 
 ## How to use
 
-### Step 1: Add dependency to Gnormalizer
+### Step 1: Add dependency to Gnormalizer
 
 If using the SBT build tool:
 
 ```sbtshell
-libraryDependencies ++= "edu.upc" %% "gnormalizer" % 0.4 % "test"
+libraryDependencies ++= "dama-upc" %% "Gnormalizer" % 0.4
+```
+
+If using Gradle:
+
+```gradle
+testCompile 'dama-upc:Gnormalizer:0.4'
+```
+
+If using Maven:
+
+```xml
+<dependency>
+  <groupId>dama-upc</groupId>
+  <artifactId>Gnormalizer</artifactId>
+  <version>0.4</version>
+  <type>pom</type>
+</dependency>
 ```
 
 ### Step 2: Use it:
