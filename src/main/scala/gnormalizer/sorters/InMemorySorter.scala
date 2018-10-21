@@ -11,10 +11,10 @@ import scala.collection.mutable.{HashMap => MutableHashMap, TreeSet => MutableTr
   * Orders all the input [[Edge]] forcing not to use the
   * disk in the process, using the RAM memory instead.
   *
-  * @param maxNodesPErBucket the maximum amount of [[Node]]
+  * @param maxNodesPerBucket the maximum amount of [[Node]]
   *                             which adjacency's will be sorted in each internal bucket.
   */
-final class InMemorySorter(maxNodesPErBucket: Int = defaultMaxNodesPerBucket) extends Sorter {
+final class InMemorySorter(maxNodesPerBucket: Int = defaultMaxNodesPerBucket) extends Sorter {
 
   /**
     * In-memory buffered [[Edge]]s.
@@ -30,7 +30,7 @@ final class InMemorySorter(maxNodesPErBucket: Int = defaultMaxNodesPerBucket) ex
     * @inheritdoc
     */
   override def addEdgeToResult(edge: Edge): Long = {
-    val bucketId: Long = edge.source / maxNodesPErBucket
+    val bucketId: Long = edge.source / maxNodesPerBucket
 
     inMemoryBuckets.get(bucketId) match {
       case Some(bucket) =>
