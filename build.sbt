@@ -24,6 +24,7 @@ libraryDependencies ++= {
 libraryDependencies ++= {
   val specs2Version = "4.3.5"
   val scalaCheckVersion = "1.14.0"
+  val scalamockVersion = "4.1.0"
   Seq(
     // Specs2 Test Framework - https://etorreborre.github.io/specs2/
     "org.specs2" %% "specs2-core" % specs2Version % "test",
@@ -31,7 +32,9 @@ libraryDependencies ++= {
     "org.specs2" %% "specs2-junit" % specs2Version % "test",
     "org.specs2" %% "specs2-scalacheck" % specs2Version % "test",
     // ScalaCheck - https://scalacheck.org/
-    "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
+    "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test",
+    // Scalamock - https://github.com/paulbutcher/ScalaMock
+    "org.scalamock" %% "scalamock" % scalamockVersion % "test"
   )
 }
 
