@@ -1,9 +1,13 @@
 name := "gnormalizer"
-organization := "edu.upc.dama"
-
-version := "0.5.0-SNAPSHOT"
 
 scalaVersion := "2.12.7"
+
+/*********    Bintray Publishing    *********/
+
+bintrayOrganization := Some("dama-upc")
+bintrayRepository := "Babel-Platform"
+licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+homepage := Some(url("https://github.com/DAMA-UPC/gnormalizer"))
 
 /*************   DEPENDENCIES   *************/
 

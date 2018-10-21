@@ -18,6 +18,8 @@ addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "1.3.15")
 addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.7")
 // https://github.com/coursier/coursier
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.2")
+// https://github.com/sbt/sbt-bintray
+addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.4")
 
 // ------------- SBT OPTIONS ----------- //
 logLevel := Level.Warn
