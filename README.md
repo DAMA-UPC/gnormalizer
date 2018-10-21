@@ -30,11 +30,14 @@ If using Maven:
 ### Step 2: Use it:
 
 ```scala
-import gnormalizer.Gnormalizer
-import gnormalizer.GraphFormat
+import gnormalizer._
 
 Gnormalizer
-  .inputFile("./input/connections.graph", GraphFormat.EdgeList)
-  .outputFile("./output/connections.graph", GraphFormat.EdgeList)
-  .execute(bucketSize = 3000) // If not specified, the default bucket size is '4500'.
+  .builder()
+  .inputFile("./input/connections.graph", EdgeList)
+  .outputFile("./output/connections.graph", EdgeList)
+  .execute(
+    startDeserializationAtLine = Some(2), // If not specified, the deserialization will be from the beginning of the file.
+    bucketSize = Some(3000) // If not specified, the default bucket size is '4500'.
+  )
 ```
