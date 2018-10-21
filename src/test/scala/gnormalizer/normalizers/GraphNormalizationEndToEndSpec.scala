@@ -1,12 +1,12 @@
-package gnormalizer.solvers
+package gnormalizer.normalizers
 
 import org.specs2.mutable.Specification
 import babel.graph.edgeOrdering
 
 /**
-  * End to end tests for [[GraphObfuscator]].
+  * End to end tests for [[GraphNormalizer]].
   */
-class GraphObfuscatorEndToEndSpec extends Specification {
+class GraphNormalizationEndToEndSpec extends Specification {
 
   private[this] val testFile = "./src/test/resources/edge_list/test_edge_list_to_obfuscate"
 
@@ -16,7 +16,7 @@ class GraphObfuscatorEndToEndSpec extends Specification {
 
   "GraphObfuscator" should {
     "Obfuscate all input graph elements and put them on order" in {
-      val result = GraphObfuscator.obfuscateEdgeListGraph(testFile).unsafeRunSync().toList
+      val result = GraphNormalizer.obfuscateEdgeListGraph(testFile).unsafeRunSync().toList
 
       (0 until numberDistinctNodesPerFile)
         .map(v => result.exists(e => e.source == v || e.target == v) must beTrue)

@@ -1,5 +1,5 @@
 package gnormalizer
-package solvers
+package normalizers
 
 import babel.graph.Edge
 import better.files._
@@ -9,25 +9,25 @@ import gnormalizer.parsers.EdgeListParser
 import gnormalizer.sorters.{Sorter, SorterSelector}
 
 /**
-  * Object containing a set of methods used for obfuscating an input graph.
+  * Object containing a set of methods used for normalizing an input graph.
   */
-object GraphObfuscator {
+object GraphNormalizer {
 
   /**
     * Class used for normalizing the graph found at the input stream.
     *
-    * @param path       containing the path to the graph being obfuscated.
+    * @param path       containing the path to the graph being normalized.
     * @param startDeserializationAtLine containing the line number where parsing starts.
     */
   @SuppressWarnings(Array("org.wartremover.warts.Nothing", "org.wartremover.warts.Any"))
   def obfuscateEdgeListGraph(path: String,
-                             startDeserializationAtLine: Long = 0L): IO[Stream[Edge]] = {
+                             startDeserializationAtLine: Option[Long] = None): IO[Stream[Edge]] = {
 
     val resultManager: Sorter = SorterSelector.sorterFromFile(path.toFile.size)
 
     // Initializes a file content Stream from the source.
     val input: fs2.Stream[IO, String] =
-      new FileDataSourceHandler().init(path).drop(startDeserializationAtLine)
+      new FileDataSourceHandler().init(path).drop(startDeserializationAtLine.getOrElse(0L))
 
     // Converts the input Stream into an Edge Stream.
     val edgeStream: fs2.Stream[IO, Edge] = new EdgeListParser().toEdgeStream(input)
