@@ -77,7 +77,11 @@ class GnormalizerApiBuilder(normalizer: GraphNormalizer) {
     def execute(bucketSize: Option[Int] = None,
                 startDeserializationAtLine: Option[Long] = None): Unit = {
 
-      val outputFile = outputPath.toFile.delete(true).createFile()
+      val outputFile =
+        outputPath
+          .toFile
+          .delete(true)
+          .createFileIfNotExists(createParents = true)
 
       normalizer
         .obfuscateEdgeListGraph(inputPath, startDeserializationAtLine)

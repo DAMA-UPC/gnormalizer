@@ -1,7 +1,6 @@
 package gnormalizer.mappers
 
-import babel.graph.Node
-import babel.graph.NodeMapping
+import babel.graph.{Node, NodeMapping}
 
 import scala.collection.immutable.{Stream => MemoryStream}
 import scala.collection.mutable

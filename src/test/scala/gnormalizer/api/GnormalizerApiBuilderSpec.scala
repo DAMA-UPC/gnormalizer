@@ -15,7 +15,7 @@ class GnormalizerApiBuilderSpec extends Specification {
 
   private[this] val testInputFilePath = "inputFilePath"
   private[this] val testInputFileFormat = EdgeList
-  private[this] val testOutputFilePath = "target/temp/outputFilePath"
+  private[this] val testOutputFilePath = "./target/temp/outputFilePath"
   private[this] val testOutputFileFormat = EdgeList
   private[this] val testBucketSize = 5111
   private[this] val testInitDeserializationAtLine = 4L
