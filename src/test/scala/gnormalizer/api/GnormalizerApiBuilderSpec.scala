@@ -22,24 +22,24 @@ class GnormalizerApiBuilderSpec extends Specification {
 
   "GnormalizerApiBuilder" in new MockContext {
 
-      val mockGraphNormalizer: GraphNormalizer = mock[GraphNormalizer]
+    val mockGraphNormalizer: GraphNormalizer = mock[GraphNormalizer]
 
-      val apiBuilder = new GnormalizerApiBuilder(mockGraphNormalizer)
+    val apiBuilder = new GnormalizerApiBuilder(mockGraphNormalizer)
 
-      val testEdge1 = Edge(1, 2)
-      val testEdge2 = Edge(6, 2)
+    val testEdge1 = Edge(1, 2)
+    val testEdge2 = Edge(6, 2)
 
-      (mockGraphNormalizer.obfuscateEdgeListGraph _)
-        .expects(testInputFilePath, Some(testInitDeserializationAtLine))
-        .returning(IO.pure(Stream(testEdge1, testEdge2)))
+    (mockGraphNormalizer.obfuscateEdgeListGraph _)
+      .expects(testInputFilePath, Some(testInitDeserializationAtLine))
+      .returning(IO.pure(Stream(testEdge1, testEdge2)))
 
-      apiBuilder
-        .inputFile(testInputFilePath, testInputFileFormat)
-        .outputFile(testOutputFilePath, testOutputFileFormat)
-        .execute(bucketSize = Some(testBucketSize),
+    apiBuilder
+      .inputFile(testInputFilePath, testInputFileFormat)
+      .outputFile(testOutputFilePath, testOutputFileFormat)
+      .execute(bucketSize = Some(testBucketSize),
                startDeserializationAtLine = Some(testInitDeserializationAtLine))
 
-      getPersistedFileContent(testOutputFilePath) must beEqualTo(
+    getPersistedFileContent(testOutputFilePath) must beEqualTo(
       Vector(testEdge1.toString, testEdge2.toString)
     )
   }

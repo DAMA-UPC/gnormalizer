@@ -25,8 +25,7 @@ class GnormalizerApiBuilder(normalizer: GraphNormalizer) {
     * @param inputPath with the location of the graph we want to transform.
     * @param inputGraphType of the graph we want to parse.
     */
-  case class GnormalizerBuilderWithInput private (inputPath: String,
-                                                  inputGraphType: GraphFormat) {
+  case class GnormalizerBuilderWithInput private (inputPath: String, inputGraphType: GraphFormat) {
 
     /**
       * Adds the output file path and its type to the builder.
