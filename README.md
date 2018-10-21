@@ -13,7 +13,7 @@ libraryDependencies ++= "dama-upc" %% "Gnormalizer" % 0.4
 If using Gradle:
 
 ```gradle
-testCompile 'dama-upc:Gnormalizer:0.4'
+compile 'dama-upc:Gnormalizer:0.4'
 ```
 
 If using Maven:
