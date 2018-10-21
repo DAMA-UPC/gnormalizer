@@ -16,7 +16,7 @@ class GraphNormalizationEndToEndSpec extends Specification {
 
   "GraphObfuscator" should {
     "Obfuscate all input graph elements and put them on order" in {
-      val result = GraphNormalizer.obfuscateEdgeListGraph(testFile).unsafeRunSync().toList
+      val result = new GraphNormalizer().obfuscateEdgeListGraph(testFile).unsafeRunSync().toList
 
       (0 until numberDistinctNodesPerFile)
         .map(v => result.exists(e => e.source == v || e.target == v) must beTrue)

@@ -11,7 +11,7 @@ import gnormalizer.sorters.{Sorter, SorterSelector}
 /**
   * Object containing a set of methods used for normalizing an input graph.
   */
-object GraphNormalizer {
+class GraphNormalizer {
 
   /**
     * Class used for normalizing the graph found at the input stream.
