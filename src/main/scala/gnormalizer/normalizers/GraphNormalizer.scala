@@ -29,7 +29,7 @@ class GraphNormalizer {
     val input: fs2.Stream[IO, String] =
       new FileDataSourceHandler()
         .init(path)
-        .drop(Math.max(0, startDeserializationAtLine.map(_ - 1L).getOrElse(0)))
+        .drop(Math.max(0, startDeserializationAtLine.map(_ - 1L).getOrElse(0L)))
 
     // Converts the input Stream into an Edge Stream.
     val edgeStream: fs2.Stream[IO, Edge] = new EdgeListParser().toEdgeStream(input)
