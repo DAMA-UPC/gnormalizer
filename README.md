@@ -4,27 +4,16 @@
 
 ### Step 1: Add dependency:
 
-If using the SBT build tool:
+https://bintray.com/dama-upc/Babel-Platform/babel
+
+#### If using the SBT tool:
+
+Add the following snippet to the `build.sbt` file:
 
 ```sbtshell
-libraryDependencies ++= "dama-upc" %% "gnormalizer" % "0.6.0"
-```
 
-If using Gradle:
-
-```gradle
-compile 'dama-upc:gnormalizer:0.6.0'
-```
-
-If using Maven:
-
-```xml
-<dependency>
-  <groupId>dama-upc</groupId>
-  <artifactId>gnormalizer</artifactId>
-  <version>0.6.0</version>
-  <type>pom</type>
-</dependency>
+resolvers += "maven" at "https://dl.bintray.com/dama-upc/Babel-Platform"
+libraryDependencies += "dama-upc" %% "gnormalizer" % "0.7.0"
 ```
 
 ### Step 2: Use it:
