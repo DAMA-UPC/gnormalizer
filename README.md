@@ -12,7 +12,7 @@ Add the following snippet to the `build.sbt` file:
 
 ```sbtshell
 resolvers += "maven" at "https://dl.bintray.com/dama-upc/Babel-Platform"
-libraryDependencies += "dama-upc" %% "gnormalizer" % "0.7.0"
+libraryDependencies += "edu.upc.dama" %% "gnormalizer" % "0.7.0"
 ```
 
 ### Step 2: Use it:
