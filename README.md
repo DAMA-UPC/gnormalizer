@@ -11,7 +11,6 @@ https://bintray.com/dama-upc/Babel-Platform/babel
 Add the following snippet to the `build.sbt` file:
 
 ```sbtshell
-
 resolvers += "maven" at "https://dl.bintray.com/dama-upc/Babel-Platform"
 libraryDependencies += "dama-upc" %% "gnormalizer" % "0.7.0"
 ```
