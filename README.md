@@ -7,13 +7,13 @@
 If using the SBT build tool:
 
 ```sbtshell
-libraryDependencies ++= "dama-upc" %% "gnormalizer" % "0.5.2"
+libraryDependencies ++= "dama-upc" %% "gnormalizer" % "0.6.0"
 ```
 
 If using Gradle:
 
 ```gradle
-compile 'dama-upc:gnormalizer:0.5.2'
+compile 'dama-upc:gnormalizer:0.6.0'
 ```
 
 If using Maven:
@@ -22,7 +22,7 @@ If using Maven:
 <dependency>
   <groupId>dama-upc</groupId>
   <artifactId>gnormalizer</artifactId>
-  <version>0.5.2</version>
+  <version>0.6.0</version>
   <type>pom</type>
 </dependency>
 ```
