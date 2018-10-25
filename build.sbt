@@ -1,5 +1,7 @@
 name := "gnormalizer"
 
+organization := "edu.upc.dama"
+
 scalaVersion := "2.12.7"
 
 /*********    Bintray Publishing    *********/
