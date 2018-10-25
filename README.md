@@ -7,7 +7,7 @@
 If using the SBT build tool:
 
 ```sbtshell
-libraryDependencies ++= "dama-upc" %% "gnormalizer" % 0.5.2
+libraryDependencies ++= "dama-upc" %% "gnormalizer" % "0.5.2"
 ```
 
 If using Gradle:
@@ -44,8 +44,9 @@ Gnormalizer
   .execute()
 ```
 
-If we want to overload the default `startDeserializationAtLine`
-and `bucketSize` default configurations, we can call an overloaded `execute`
+If we want a verbose mode, printing the graph as soon as its been normalized
+or we to overload the default `startDeserializationAtLine` and/or `bucketSize`
+default configurations, we can call an overloaded `execute`
 method as in the following code snippet:
 
 ```scala
@@ -57,6 +58,7 @@ Gnormalizer
   .outputFile("./output/connections.graph", EdgeList)
   .execute(
     startDeserializationAtLine = Some(2), // Default -> 1
-    bucketSize = Some(3000) // Default -> 4500
+    bucketSize = Some(3000), // Default -> 4500
+    verboseLog = true // Default -> false
   )
 ```

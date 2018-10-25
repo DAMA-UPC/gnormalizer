@@ -75,7 +75,8 @@ class GnormalizerApiBuilder(normalizer: GraphNormalizer) {
       */
     @SuppressWarnings(Array("org.wartremover.warts.Overloading")) // Required if using the library from Java.
     def execute(bucketSize: Option[Int] = None,
-                startDeserializationAtLine: Option[Long] = None): Unit = {
+                startDeserializationAtLine: Option[Long] = None,
+                verboseLog: Boolean = false): Unit = {
 
       val outputFile =
         outputPath
@@ -87,6 +88,13 @@ class GnormalizerApiBuilder(normalizer: GraphNormalizer) {
         .obfuscateEdgeListGraph(inputPath, startDeserializationAtLine)
         .unsafeRunSync()
         .map(_.toString)
+        .map(edge => {
+            if (verboseLog) {
+              System.out.println(edge.toString)
+            }
+            edge
+          }
+        )
         .map(_.concat("\n"))
         .foreach(outputFile.append(_)(DefaultCharset))
     }
